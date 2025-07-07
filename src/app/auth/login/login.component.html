@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <link rel="stylesheet" href="login.component.css" />
+  <title>Dashboard Login</title>
+</head>
+
+<body>
+  <div class="container" id="container">
+
+    <!-- Sign In Form -->
+    <div class="form-container sign-in">
+      <form (ngSubmit)="onSubmit()">
+        <h1>Sign In</h1>
+        <input
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+
+    <!-- Welcoming Message -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-right">
+          <h1>Welcome to the Dashboard</h1>
+          <p>
+            Our dashboard is your command center for monitoring anomalies, 
+            accessing data insights, and making informed decisions quickly.
+            Stay updated, stay efficient.
+          </p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</body>
+
+</html>
