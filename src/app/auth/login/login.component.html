@@ -18,23 +18,26 @@
     <!-- Sign In Form -->
     <div class="form-container sign-in">
       <form (ngSubmit)="onSubmit()">
-        <h1>Sign In</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          [(ngModel)]="email"
-          name="email"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
+  <h1>Sign In</h1>
+  <input
+    type="email"
+    placeholder="Email"
+    [(ngModel)]="email"
+    name="email"
+    required
+  />
+  <input
+    type="password"
+    placeholder="Password"
+    [(ngModel)]="password"
+    name="password"
+    required
+  />
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Logging in...' : 'Sign In' }}
+  </button>
+</form>
+
     </div>
 
     <!-- Welcoming Message -->
