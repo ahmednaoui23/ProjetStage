@@ -1,0 +1,18 @@
+<div class="popup-overlay">
+  <div class="popup-box">
+    <div class="popup-left">
+      <h2 class="title">Add User</h2>
+      <form [formGroup]="userForm" (ngSubmit)="submitForm()" class="popup-form" autofocus="true">
+        <input type="text" formControlName="username" placeholder="Username" autofocus />
+        <input type="email" formControlName="email" placeholder="Email" autofocus />
+        <input type="password" formControlName="password" placeholder="Password" autofocus />
+        <button type="submit" class="btn-submit">Add</button>
+        <button type="button" class="btn-cancel" (click)="close()">Cancel</button>
+      </form>
+    </div>
+    <div class="popup-right">
+      <h3> Welcome Admin </h3>
+      <p>Fill in the details to add a new user to your dashboard. Keep your team organized and ready to work!</p>
+    </div>
+  </div>
+</div>

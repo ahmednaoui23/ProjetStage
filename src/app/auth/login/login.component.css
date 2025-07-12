@@ -150,7 +150,7 @@ body{
     width: 50%;
     height: 100%;
     overflow: hidden;
-    transition: all 0.6s ease-in-out;
+    transition: all 0.3s ease-in-out;
     border-radius: 150px 0 0 100px;
     z-index: 1000;
 }
@@ -207,4 +207,62 @@ body{
 
 .container.active .toggle-right{
     transform: translateX(200%);
+}
+
+/* Responsive fixes — added only */
+
+@media (max-width: 480px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  .container {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    border-radius: 20px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .form-container {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: auto !important;
+    transition: none !important;
+  }
+
+  .sign-in, .sign-up {
+    width: 100% !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: auto !important;
+  }
+
+  .toggle-container {
+    display: none;
+  }
+
+  .toggle {
+    display: none;
+  }
+
+  .container form {
+    padding: 0 15px;
+  }
+
+  .container button {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  .social-icons a {
+    width: 32px;
+    height: 32px;
+  }
 }
