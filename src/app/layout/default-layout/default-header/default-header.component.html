@@ -1,7 +1,7 @@
 <ng-container>
   <c-container [fluid]="true" class="border-bottom px-4">
     <button
-      [cSidebarToggle]="sidebarId()"
+      [cSidebarToggle]="sidebarId" 
       cHeaderToggler
       class="btn"
       toggle="visible"
@@ -89,7 +89,7 @@
         </a>
       </li>
       <li>
-        <a cDropdownItem routerLink="/ apps/tasks">
+        <a cDropdownItem routerLink="/apps/tasks">
           <svg cIcon class="me-2" name="cilTask"></svg>
           Tasks
           <c-badge class="ms-2 float-end" color="danger">42</c-badge>
@@ -107,12 +107,14 @@
           Settings
         </h6>
       </li>
+
       <li>
         <a cDropdownItem routerLink="/profile">
           <svg cIcon class="me-2" name="cilUser"></svg>
           Profile
         </a>
       </li>
+
       <li>
         <a cDropdownItem routerLink="/settings">
           <svg cIcon class="me-2" name="cilSettings"></svg>
@@ -141,11 +143,17 @@
         </a>
       </li>
       <li>
+        <button (click)="showPopup=true" cDropdownItem  style="cursor: pointer;">
+        <svg cIcon class="me-2" name="cilUserFollow"></svg>
+        Add User
+        </button>
+      </li>
+
+
         <a cDropdownItem (click)="logout()">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>
           Logout
         </a>
-      </li>
     </ul>
   </c-dropdown>
 </ng-template>
@@ -156,17 +164,17 @@
       <svg cIcon [name]="icons()" size="lg"></svg>
     </button>
     <div cDropdownMenu>
-      @for (mode of colorModes; track mode.name) {
-        <button
-          (click)="colorMode.set(mode.name)"
-          [active]="colorMode() === mode.name"
-          cDropdownItem
-          class="d-flex align-items-center"
-        >
-          <svg cIcon class="me-2" [name]="mode.icon" size="lg"></svg>
-          {{ mode.text }}
-        </button>
-      }
+      <button
+        *ngFor="let mode of colorModes"
+        (click)="colorMode.set(mode.name)"
+        [active]="colorMode() === mode.name"
+        cDropdownItem
+        class="d-flex align-items-center"
+      >
+        <svg cIcon class="me-2" [name]="mode.icon" size="lg"></svg>
+        {{ mode.text }}
+      </button>
     </div>
   </c-dropdown>
 </ng-template>
+<app-user-popup *ngIf="showPopup" (closePopup)="showPopup = false"></app-user-popup>

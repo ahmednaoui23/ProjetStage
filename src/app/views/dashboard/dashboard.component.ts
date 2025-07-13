@@ -23,7 +23,6 @@ import { IconDirective } from '@coreui/icons-angular';
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-
 interface IUser {
   name: string;
   state: string;
@@ -61,6 +60,7 @@ interface IUser {
     CardHeaderComponent,
     TableDirective,
     AvatarComponent
+  
   ]
 })
 export class DashboardComponent implements OnInit {
@@ -85,6 +85,9 @@ export class DashboardComponent implements OnInit {
   public trafficRadioGroup = new FormGroup({
     trafficRadio: new FormControl('Month')
   });
+
+  // <-- ADD THIS PROPERTY to control modal visibility
+  showAddUserModal = false;
 
   ngOnInit(): void {
     this.initCharts();
@@ -127,5 +130,4 @@ export class DashboardComponent implements OnInit {
         this.mainChartRef().update();
       });
     }
-  }
-}
+  }}

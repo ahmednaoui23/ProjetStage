@@ -1,12 +1,15 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   provideRouter,
-  withEnabledBlockingInitialNavigation,
   withHashLocation,
   withInMemoryScrolling,
   withRouterConfig,
-  withViewTransitions
+  withViewTransitions,
+  withPreloading,
+  PreloadAllModules
 } from '@angular/router';
 
 import {
@@ -24,6 +27,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
       routes,
+      withPreloading(PreloadAllModules),
       withRouterConfig({
         onSameUrlNavigation: 'reload'
       }),
@@ -31,18 +35,19 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled'
       }),
-      withEnabledBlockingInitialNavigation(),
       withViewTransitions(),
       withHashLocation()
     ),
-    provideHttpClient(withInterceptorsFromDi()), // ✅ enable interceptors
+    provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
     },
-    importProvidersFrom(SidebarModule, DropdownModule),
+    importProvidersFrom(SidebarModule, DropdownModule, CommonModule, ReactiveFormsModule),
     IconSetService,
     provideAnimationsAsync()
   ]
 };
+// Note: The `provideAnimationsAsync` is used to ensure that animations are loaded asynchronously.
+// This is particularly useful for larger applications where you want to optimize the initial load time.  
