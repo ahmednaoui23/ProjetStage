@@ -1,6 +1,7 @@
-import { NgStyle } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 import { Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { ChartOptions } from 'chart.js';
 import {
   AvatarComponent,
@@ -19,10 +20,15 @@ import {
 } from '@coreui/angular';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
-
+import { AnomaliesListComponent } from '../../anomalies-list/anomalies-list.component'; // Chemin à adapter selon ta structure
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 interface IUser {
   name: string;
   state: string;
@@ -59,8 +65,14 @@ interface IUser {
     WidgetsBrandComponent,
     CardHeaderComponent,
     TableDirective,
-    AvatarComponent
-  
+    AvatarComponent,
+    AnomaliesListComponent,
+    DatePipe,
+    CommonModule,
+    MatTableModule,
+    MatProgressBarModule,
+    MatInputModule,
+    MatFormFieldModule
   ]
 })
 export class DashboardComponent implements OnInit {
