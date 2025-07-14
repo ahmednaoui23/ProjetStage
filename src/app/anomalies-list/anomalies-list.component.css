@@ -21,7 +21,7 @@
 .titre {
   margin: 0;
   font-size: 24px;
-  font-weight: 800; /* équivalent x-large */
+  font-weight: lighter; /* équivalent x-large */
   color: #222;
 }
 
@@ -162,7 +162,7 @@ tr.mat-row:hover {
 
 
 .custom-table .mat-cell {
-  background-color: #fff; /* même couleur que .container */
+  background-color: #ffffff; 
   color: #444;
   padding: 10px 8px;
   border-bottom: 1px solid #eee;
@@ -170,10 +170,10 @@ tr.mat-row:hover {
 
 
 .custom-table .mat-row:nth-child(even) {
-  background-color: #fafafa; /* léger gris clair */
+  background-color: #ffffff; /* léger gris clair */
 }
 
 .custom-table .mat-row:hover {
-  background-color: #e8f0fe; /* bleu clair au survol */
+  background-color: #ffffff; /* bleu clair au survol */
   cursor: pointer;
 }
