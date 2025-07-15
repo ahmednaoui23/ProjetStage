@@ -321,75 +321,65 @@
 <c-row>
   <c-col xs>
     <c-card class="mb-4">
+      <c-card-header>
+        <strong>Articles</strong>
+        <div class="d-flex gap-3 flex-wrap align-items-center justify-content-end">
+  <div>
+    <label for="filterCategory" class="form-label me-1">Select Filter:</label>
+    <select id="filterCategory" class="form-select form-select-sm" (change)="onFilterCategoryChange($any($event.target).value)">
+      <option value="">Select one</option>
+      <option value="color">Color</option>
+      <option value="sousFamille">Sousfamille</option>
+      <option value="saison">Saison</option>
+    </select>
+  </div>
+</div>
+      </c-card-header>
       <c-card-body>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-0 border"
-        >
-          <thead class="text-nowrap text-truncate">
-          <tr>
-            <th class="bg-body-tertiary text-center ">
-              <svg cIcon name="cilPeople"></svg>
-            </th>
-            <th class="bg-body-tertiary">User</th>
-            <th class="bg-body-tertiary text-center">Country</th>
-            <th class="bg-body-tertiary">Usage</th>
-            <th class="bg-body-tertiary text-center">Payment Method</th>
-            <th class="bg-body-tertiary">Activity</th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (user of users; track user.name; let i = $index) {
-              <tr>
-                <td class="text-center">
-                  <c-avatar size="md" src="{{ user.avatar }}" status="{{ user.status }}" />
-                </td>
-                <td>
-                  <div>{{ user.name }}</div>
-                  <div class="small text-body-secondary text-nowrap">
-                  <span>
-                    {{ user.state }} | Registered: {{ user.registered }}
-                  </span>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <svg
-                    cIcon
-                    id="{{ user.country + user.name }}"
-                    name="cif{{ user.country }}"
-                    size="xl"
-                    title="{{ user.country }}"
-                  ></svg>
-                </td>
-                <td>
-                  <div class="d-flex justify-content-between">
-                    <div class="float-start">
-                      <strong>{{ user.usage }}%</strong>
-                    </div>
-                    <div class="float-end ms-1 text-nowrap">
-                      <small class="text-body-secondary">
-                        {{ user.period }}
-                      </small>
-                    </div>
-                  </div>
-                  <c-progress thin [value]="user.usage" color="{{ user.color }}" aria-label="Usage" />
-                </td>
-                <td class="text-center">
-                  <svg cIcon name="cibCc{{ user.payment }}" size="xl"></svg>
-                </td>
-                <td>
-                  <div class="small text-body-secondary">Last login</div>
-                  <div class="fw-semibold text-nowrap">{{ user.activity }}</div>
-                </td>
-              </tr>
-            }
-          </tbody>
+        <table cTable [striped]="true" [hover]="true" [responsive]="true" class="mb-0 border">
+          <thead>
+  <tr>
+    <th>Code</th>
+    <th>Article</th>
+    <th>Color</th>
+    <th>Sousfamille</th>
+    <th>Saison</th>
+    <th>Grille</th>
+    <th>Saisi Par</th>
+    <th>Check</th>   
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let article of paginatedArticles; let i = index">
+    <td>{{ article.code }}</td>
+    <td>{{ article.name }}</td>
+    <td>{{ article.color }}</td>
+    <td>{{ article.sousFamille }}</td>
+    <td>{{ article.saison }}</td>
+    <td>{{ article.grille }}</td>
+    <td>{{ article.saisiPar }}</td>
+    <td>
+      <input
+        type="checkbox"
+        [checked]="selectedArticleIds.includes(article.id)"
+        (change)="toggleSelection(article.id)"
+      />
+    </td>
+  </tr>
+  <tr *ngIf="paginatedArticles.length === 0">
+    <td colspan="7" class="text-center">No articles found</td>
+  </tr>
+</tbody>
+
         </table>
       </c-card-body>
+
+      <c-card-footer class="d-flex justify-content-center gap-3 align-items-center">
+        <button cButton color="secondary" size="sm" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"><<</button>
+        <span>Page {{ currentPage }} / {{ totalPages }}</span>
+        <button cButton color="secondary" size="sm" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">>></button>
+        <button cButton color="primary" size="sm" (click)="verifySelected()">Verify Selected</button>
+      </c-card-footer>
     </c-card>
   </c-col>
 </c-row>
