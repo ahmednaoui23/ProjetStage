@@ -1,0 +1,67 @@
+<!-- src/app/anomalies-list/anomalies-list.component.html -->
+<div class="container px-4 py-3">
+
+  <!-- En-tête : titre à gauche et recherche à droite -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+    <h2 class="titre m-0">Liste des Anomalies</h2>
+
+    <div class="search-container d-flex align-items-center gap-2">
+        <input
+          matInput
+          placeholder="Rechercher..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilter($event)" />
+      <button mat-icon-button disabled>
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barre de chargement -->
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <!-- Tableau des anomalies -->
+  <table mat-table [dataSource]="anomalies" class="mat-elevation-z8 w-100 mt-3 custom-table">
+
+    <!-- Code Article -->
+    <ng-container matColumnDef="code_article">
+      <th mat-header-cell *matHeaderCellDef> Code Article </th>
+      <td mat-cell *matCellDef="let anomalie"> {{ anomalie.code_article }} </td>
+    </ng-container>
+
+    <!-- Type -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> Type </th>
+      <td mat-cell *matCellDef="let anomalie">
+        <span [ngClass]="getTypeClass(anomalie.type)">
+          {{ anomalie.type }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Message -->
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef> Message </th>
+      <td mat-cell *matCellDef="let anomalie"> {{ anomalie.message }} </td>
+    </ng-container>
+
+    <!-- Date -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let anomalie"> {{ anomalie.date | date: 'short' }} </td>
+    </ng-container>
+
+    <!-- Définition des lignes -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-end align-items-center mt-3 gap-3">
+    <button mat-raised-button color="primary" (click)="prevPage()" [disabled]="page === 1">Précédent</button>
+    <span>Page {{ page }} / {{ totalPages }}</span>
+    <button mat-raised-button color="primary" (click)="nextPage()" [disabled]="page === totalPages">Suivant</button>
+  </div>
+
+</div>

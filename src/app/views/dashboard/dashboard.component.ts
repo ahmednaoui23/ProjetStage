@@ -1,6 +1,7 @@
-import { NgStyle, CommonModule } from '@angular/common';
+import {NgStyle, CommonModule  } from '@angular/common';
 import { Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { ChartOptions } from 'chart.js';
 import {
   ButtonDirective,
@@ -18,12 +19,10 @@ import {
 } from '@coreui/angular';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
-
+import { AnomaliesListComponent } from '../../anomalies-list/anomalies-list.component'; // Chemin à adapter selon ta structure
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-import { DashboardService } from '../../services/dashboard.service';
-
 interface IUser {
   name: string;
   state: string;
@@ -72,6 +71,7 @@ interface Article {
     WidgetsBrandComponent,
     CardHeaderComponent,
     TableDirective
+  
   ]
 })
 export class DashboardComponent implements OnInit {
