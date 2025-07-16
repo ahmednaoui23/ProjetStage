@@ -45,6 +45,7 @@ interface Article {
   color: string;
   sousFamille: string;
   saison: string;
+  grille?: string; // Optional property for grid
   saisiPar: string;
 }
 
@@ -85,11 +86,13 @@ export class DashboardComponent implements OnInit {
 
   public mainChart: IChartProps = { type: 'line' };
   public mainChartRef: WritableSignal<any> = signal(undefined);
+
   #mainChartRefEffect = effect(() => {
     if (this.mainChartRef()) {
       this.setChartStyles();
     }
   });
+
   public chart: Array<IChartProps> = [];
   public trafficRadioGroup = new FormGroup({
     trafficRadio: new FormControl('Month')
@@ -124,7 +127,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.initCharts();
     this.updateChartOnColorModeChange();
-    this.fetchArticles(); // Load mock data for now
+    this.fetchArticles(); // Load data from backend
   }
 
   initCharts(): void {
@@ -166,28 +169,23 @@ export class DashboardComponent implements OnInit {
   }
 
   // --------------------------
-  // MOCK DATA FOR TESTING
+  // FETCH DATA FROM BACKEND
   // --------------------------
   fetchArticles(): void {
-    this.articles = [
-  { id: 1, code: 'BHNP282', name: 'CITY P1 BLACK', color: 'N/A', sousFamille: 'DAILY PANTALON', saison: 'NAFNAF HIVER 2024 - B', saisiPar: 'Admin' },
-  { id: 2, code: 'A102', name: 'Mint', color: 'Green', sousFamille: 'Herb', saison: 'Spring', saisiPar: 'User1' },
-  { id: 3, code: 'A103', name: 'Carrot', color: 'Orange', sousFamille: 'Root', saison: 'Winter', saisiPar: 'User2' },
-  { id: 4, code: 'A104', name: 'Basil', color: 'Green', sousFamille: 'Herb', saison: 'Summer',  saisiPar: 'Admin' },
-  { id: 5, code: 'A105', name: 'Pumpkin', color: 'Orange', sousFamille: 'Fruit', saison: 'Fall',  saisiPar: 'User3' },
-  { id: 6, code: 'A106', name: 'Parsley', color: 'Green', sousFamille: 'Herb', saison: 'Spring', saisiPar: 'User4' },
-  { id: 7, code: 'A107', name: 'Beetroot', color: 'Red', sousFamille: 'Root', saison: 'Winter', saisiPar: 'Admin' },
-  { id: 8, code: 'A108', name: 'Rosemary', color: 'Green', sousFamille: 'Herb', saison: 'Fall', saisiPar: 'User5' },
-  { id: 9, code: 'A109', name: 'Chili', color: 'Red', sousFamille: 'Fruit', saison: 'Summer', saisiPar: 'User6' },
-  { id: 10, code: 'A110', name: 'Cabbage', color: 'Green', sousFamille: 'Leaf', saison: 'Winter', saisiPar: 'Admin' }
-];
+    this.dashboardService.getArticles().subscribe({
+      next: (data: Article[]) => {
+        this.articles = data;
 
+        this.extractColors();
+        this.extractSousFamilles();
+        this.extractSaisons();
 
-    this.extractColors();
-    this.extractSousFamilles();
-    this.extractSaisons();
-
-    this.applyFilterAndPaginate();
+        this.applyFilterAndPaginate();
+      },
+      error: (err) => {
+        console.error('Error loading articles', err);
+      }
+    });
   }
 
   extractColors(): void {

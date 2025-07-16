@@ -11,15 +11,25 @@ export interface Article {
   color: string;
   sousFamille: string;
   saison: string;
+  grille?: string; // Optional property for grid
   saisiPar: string; // Added property
   // Add other properties if needed
+}
+export interface ArticleResponse {
+  page: number;
+  limit: number;
+  total_pages: number;
+  total_articles: number;
+  next_page: string | null;
+  prev_page: string | null;
+  articles: Article[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  getAll(): Observable<Article[]> {
+  getArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(`${environment.apiUrl}/articles`);
   }
   private http = inject(HttpClient);
@@ -27,11 +37,6 @@ export class DashboardService {
   // Existing method
   getProtectedData(): Observable<{ message: string }> {
     return this.http.get<{ message: string }>(`${environment.apiUrl}/dashboard`);
-  }
-
-  // ✅ Get all articles (for dashboard table)
-  getAllArticles(): Observable<Article[]> {
-    return this.http.get<Article[]>(`${environment.apiUrl}/articles`);
   }
 
   // ✅ Verify anomalies for selected article IDs
