@@ -1,9 +1,8 @@
-import { NgStyle } from '@angular/common';
+import { NgStyle, CommonModule } from '@angular/common';
 import { Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChartOptions } from 'chart.js';
 import {
-  AvatarComponent,
   ButtonDirective,
   ButtonGroupComponent,
   CardBodyComponent,
@@ -23,6 +22,8 @@ import { IconDirective } from '@coreui/icons-angular';
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
+import { DashboardService } from '../../services/dashboard.service';
+
 interface IUser {
   name: string;
   state: string;
@@ -35,6 +36,16 @@ interface IUser {
   avatar: string;
   status: string;
   color: string;
+}
+
+interface Article {
+  id: number;
+  code: string;
+  name: string;
+  color: string;
+  sousFamille: string;
+  saison: string;
+  saisiPar: string;
 }
 
 @Component({
@@ -52,15 +63,14 @@ interface IUser {
     ButtonGroupComponent,
     FormCheckLabelDirective,
     ChartjsComponent,
+    CommonModule,
     NgStyle,
     CardFooterComponent,
     GutterDirective,
     ProgressComponent,
     WidgetsBrandComponent,
     CardHeaderComponent,
-    TableDirective,
-    AvatarComponent
-  
+    TableDirective
   ]
 })
 export class DashboardComponent implements OnInit {
@@ -69,10 +79,9 @@ export class DashboardComponent implements OnInit {
   readonly #document: Document = inject(DOCUMENT);
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
+  readonly dashboardService = inject(DashboardService);
 
-  public users: IUser[] = [
-    // ... your existing users array unchanged ...
-  ];
+  public users: IUser[] = [];
 
   public mainChart: IChartProps = { type: 'line' };
   public mainChartRef: WritableSignal<any> = signal(undefined);
@@ -86,12 +95,36 @@ export class DashboardComponent implements OnInit {
     trafficRadio: new FormControl('Month')
   });
 
-  // <-- ADD THIS PROPERTY to control modal visibility
   showAddUserModal = false;
+
+  // --------------------------
+  // FILTER & PAGINATION PROPERTIES
+  // --------------------------
+  articles: Article[] = [];
+  filteredArticles: Article[] = [];
+  paginatedArticles: Article[] = [];
+  selectedArticleIds: number[] = [];
+
+  filters = {
+    color: '',
+    sousFamille: '',
+    saison: ''
+  };
+
+  uniqueColors: string[] = [];
+  uniqueSousFamilles: string[] = [];
+  uniqueSaisons: string[] = [];
+
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 1;
+
+  selectedFilterCategory: keyof typeof this.filters | '' = '';
 
   ngOnInit(): void {
     this.initCharts();
     this.updateChartOnColorModeChange();
+    this.fetchArticles(); // Load mock data for now
   }
 
   initCharts(): void {
@@ -130,4 +163,135 @@ export class DashboardComponent implements OnInit {
         this.mainChartRef().update();
       });
     }
-  }}
+  }
+
+  // --------------------------
+  // MOCK DATA FOR TESTING
+  // --------------------------
+  fetchArticles(): void {
+    this.articles = [
+  { id: 1, code: 'BHNP282', name: 'CITY P1 BLACK', color: 'N/A', sousFamille: 'DAILY PANTALON', saison: 'NAFNAF HIVER 2024 - B', saisiPar: 'Admin' },
+  { id: 2, code: 'A102', name: 'Mint', color: 'Green', sousFamille: 'Herb', saison: 'Spring', saisiPar: 'User1' },
+  { id: 3, code: 'A103', name: 'Carrot', color: 'Orange', sousFamille: 'Root', saison: 'Winter', saisiPar: 'User2' },
+  { id: 4, code: 'A104', name: 'Basil', color: 'Green', sousFamille: 'Herb', saison: 'Summer',  saisiPar: 'Admin' },
+  { id: 5, code: 'A105', name: 'Pumpkin', color: 'Orange', sousFamille: 'Fruit', saison: 'Fall',  saisiPar: 'User3' },
+  { id: 6, code: 'A106', name: 'Parsley', color: 'Green', sousFamille: 'Herb', saison: 'Spring', saisiPar: 'User4' },
+  { id: 7, code: 'A107', name: 'Beetroot', color: 'Red', sousFamille: 'Root', saison: 'Winter', saisiPar: 'Admin' },
+  { id: 8, code: 'A108', name: 'Rosemary', color: 'Green', sousFamille: 'Herb', saison: 'Fall', saisiPar: 'User5' },
+  { id: 9, code: 'A109', name: 'Chili', color: 'Red', sousFamille: 'Fruit', saison: 'Summer', saisiPar: 'User6' },
+  { id: 10, code: 'A110', name: 'Cabbage', color: 'Green', sousFamille: 'Leaf', saison: 'Winter', saisiPar: 'Admin' }
+];
+
+
+    this.extractColors();
+    this.extractSousFamilles();
+    this.extractSaisons();
+
+    this.applyFilterAndPaginate();
+  }
+
+  extractColors(): void {
+    const setColors = new Set(this.articles.map(a => a.color));
+    this.uniqueColors = Array.from(setColors);
+  }
+
+  extractSousFamilles(): void {
+    const setSf = new Set(this.articles.map(a => a.sousFamille));
+    this.uniqueSousFamilles = Array.from(setSf);
+  }
+
+  extractSaisons(): void {
+    const setS = new Set(this.articles.map(a => a.saison));
+    this.uniqueSaisons = Array.from(setS);
+  }
+
+  onFilterChange(filterName: keyof typeof this.filters, value: string) {
+    this.filters[filterName] = value;
+    this.currentPage = 1;
+    this.applyFilterAndPaginate();
+  }
+
+  onFilterCategoryChange(category: keyof typeof this.filters | ''): void {
+    this.selectedFilterCategory = category;
+
+    this.filters.color = '';
+    this.filters.sousFamille = '';
+    this.filters.saison = '';
+
+    if (category) {
+      this.filteredArticles = this.articles.filter(article => {
+        const val = article[category];
+        return val !== null && val !== undefined && val.toString().trim() !== '';
+      });
+    } else {
+      this.filteredArticles = [...this.articles];
+    }
+
+    this.currentPage = 1;
+    this.totalPages = Math.ceil(this.filteredArticles.length / this.pageSize) || 1;
+    this.paginatedArticles = this.filteredArticles.slice(0, this.pageSize);
+  }
+
+  applyFilterAndPaginate(): void {
+    this.filteredArticles = this.articles.filter(a =>
+      (this.filters.color ? a.color === this.filters.color : true) &&
+      (this.filters.sousFamille ? a.sousFamille === this.filters.sousFamille : true) &&
+      (this.filters.saison ? a.saison === this.filters.saison : true)
+    );
+
+    this.totalPages = Math.ceil(this.filteredArticles.length / this.pageSize) || 1;
+
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedArticles = this.filteredArticles.slice(start, end);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.applyFilterAndPaginate();
+  }
+
+  toggleSelection(id: number): void {
+    const index = this.selectedArticleIds.indexOf(id);
+    if (index > -1) {
+      this.selectedArticleIds.splice(index, 1);
+    } else {
+      this.selectedArticleIds.push(id);
+    }
+  }
+
+  toggleAll(checked: boolean): void {
+    const idsOnPage = this.paginatedArticles.map(a => a.id);
+    if (checked) {
+      this.selectedArticleIds = Array.from(new Set([...this.selectedArticleIds, ...idsOnPage]));
+    } else {
+      this.selectedArticleIds = this.selectedArticleIds.filter(id => !idsOnPage.includes(id));
+    }
+  }
+
+  verifySelected(): void {
+    if (this.selectedArticleIds.length === 0) return;
+    this.dashboardService.verifyAnomalies(this.selectedArticleIds).subscribe(res => {
+      console.log('Anomalies detected:', res);
+    });
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.applyFilterAndPaginate();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFilterAndPaginate();
+    }
+  }
+
+  hasNextPage(): boolean {
+    return this.currentPage < this.totalPages;
+  }
+}
