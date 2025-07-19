@@ -20,6 +20,11 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
       },
       {
+    path: 'anomalies',
+    loadComponent: () => import('../app/anomalies-list/anomalies-list.component').then(m => m.AnomaliesListComponent),
+    data: { title: 'Liste des Anomalies' }
+  },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes),
       },

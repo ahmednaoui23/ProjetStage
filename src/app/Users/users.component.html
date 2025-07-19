@@ -1,0 +1,36 @@
+<h2 class="text-xl font-bold mb-4">User Management</h2>
+
+<table class="table table-striped w-full">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users" (click)="showUserFiche(user)" class="cursor-pointer hover:bg-gray-100">
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Add User Form -->
+<div class="mt-6">
+  <h3>Add User</h3>
+  <form #userForm="ngForm" (ngSubmit)="addUser(userForm.value)">
+    <input name="name" ngModel placeholder="Name" required />
+    <input name="email" ngModel placeholder="Email" required />
+    <select name="role" ngModel required>
+      <option value="User">User</option>
+      <option value="Admin">Admin</option>
+      <option value="Manager">Manager</option>
+    </select>
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+<!-- User Fiche -->
+<app-user-fiche *ngIf="selectedUser" [user]="selectedUser" (close)="closeFiche()"></app-user-fiche>
