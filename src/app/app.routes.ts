@@ -24,6 +24,7 @@ export const routes: Routes = [
     loadComponent: () => import('../app/anomalies-list/anomalies-list.component').then(m => m.AnomaliesListComponent),
     data: { title: 'Liste des Anomalies' }
   },
+  
       {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes),
@@ -31,6 +32,11 @@ export const routes: Routes = [
       {
         path: 'base',
         loadChildren: () => import('./views/base/routes').then((m) => m.routes),
+      },
+      {
+        path: 'articles',
+        loadComponent: () => import('../app/articles/articles.component').then((m) => m.ArticlesComponent),
+        data: { title: '  Liste des articles' }
       },
       {
         path: 'buttons',
