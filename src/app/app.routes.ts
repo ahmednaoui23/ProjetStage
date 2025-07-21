@@ -24,6 +24,10 @@ export const routes: Routes = [
     loadComponent: () => import('../app/anomalies-list/anomalies-list.component').then(m => m.AnomaliesListComponent),
     data: { title: 'Liste des Anomalies' }
   },
+   {path: 'utilisateurs',
+    loadComponent: () => import('../app/Users/users.component').then(m => m.UsersComponent),
+    data: { title: 'Liste des Utilisateurs' }
+  },
   
       {
         path: 'theme',

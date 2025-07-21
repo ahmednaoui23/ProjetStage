@@ -1,27 +1,49 @@
 import { Component } from '@angular/core';
-import { User } from '../services/user';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, DatePipe],
   templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css']
 })
 export class UsersComponent {
-  users: User[] = [
-    { id: 1, name: 'Ahmed Naoui', email: 'ahmed@mail.com', role: 'Admin' },
-    { id: 2, name: 'Sana Trabelsi', email: 'sana@mail.com', role: 'User' },
+  searchEmail = '';
+  users = [
+    {
+      nom: 'Naoui',
+      prenom: 'Ahmed',
+      email: 'ahmed@example.com',
+      role: 'Admin',
+      datecreation: new Date(),
+    },
+    {
+      nom: 'Doe',
+      prenom: 'Jane',
+      email: 'jane@example.com',
+      role: 'User',
+      datecreation: new Date(),
+    },
   ];
 
-  selectedUser: User | null = null;
-
-  addUser(user: User) {
-    this.users.push({ ...user, id: Date.now() });
+  get filteredUsers() {
+    return this.users.filter(user =>
+      user.email.toLowerCase().includes(this.searchEmail.toLowerCase())
+    );
   }
 
-  showUserFiche(user: User) {
-    this.selectedUser = user;
+  constructor(public router: Router) {}
+
+  search() {
+    // Just triggers change detection for now
   }
 
-  closeFiche() {
-    this.selectedUser = null;
+  goToFiche(user: any) {
+    console.log('Go to user:', user);
+    // Example: navigate to user detail page with ID if available
+    // this.router.navigate(['/user-detail', user.id]);
   }
 }
