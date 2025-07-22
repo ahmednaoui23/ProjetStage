@@ -1,0 +1,15 @@
+.container {
+  max-width: 900px;
+}
+.btn{
+  margin-top: 30px;
+}
+.card {
+  border-left: 4px solid #dc3545;
+  border-radius: 10px;
+}
+
+.card-title {
+  color: #dc3545;
+  font-weight: bold;
+}

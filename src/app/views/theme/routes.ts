@@ -14,7 +14,7 @@ export const routes: Routes = [
       },
       {
         path: 'colors',
-        loadComponent: () => import('./colors.component').then(m => m.ColorsComponent),
+        loadComponent: () => import('./ArticleForm.component').then(m => m.ArticleFormComponent),
         data: {
           title: 'Colors'
         }

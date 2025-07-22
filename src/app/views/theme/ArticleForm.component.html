@@ -1,0 +1,116 @@
+<div class="container p-4">
+  <h2>Test Article</h2>
+
+  <form [formGroup]="articleForm" (ngSubmit)="verifierArticle()">
+    <!-- Article -->
+    <div class="form-group mb-3">
+      <label for="Article">Article *</label>
+      <input id="Article" type="text" class="form-control" formControlName="Article" />
+      <div class="text-danger" *ngIf="isInvalid('Article')">Le champ Article est requis.</div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="IDArticle">Id Article *</label>
+      <input id="IDArticle" type="number" class="form-control" formControlName="IDArticle" readonly />
+    </div>
+    <!-- Etat -->
+    <div class="form-group mb-3">
+      <label for="Etat">Etat *</label>
+      <input id="Etat" type="number" class="form-control" formControlName="Etat" />
+      <div class="text-danger" *ngIf="isInvalid('Etat')">Le champ État est requis.</div>
+    </div>
+    
+    <!-- Prix Achat -->
+    <div class="form-group mb-3">
+      <label for="prixAchat">Prix d'achat *</label>
+      <input id="prixAchat" type="number" class="form-control" formControlName="prixAchat" />
+      <div class="text-danger" *ngIf="isInvalid('prixAchat')">Le champ Prix d'achat est requis.</div>
+    </div>
+
+    <!-- Prix Vente -->
+    <div class="form-group mb-3">
+      <label for="PrixFac">Prix de vente *</label>
+      <input id="PrixFac" type="number" class="form-control" formControlName="PrixFac" />
+      <div class="text-danger" *ngIf="isInvalid('PrixFac')">Le champ Prix de vente est requis.</div>
+    </div>
+
+    <!-- Famille -->
+    <div class="form-group mb-3">
+      <label for="Famille">Famille *</label>
+      <input id="Famille" type="text" class="form-control" formControlName="Famille" />
+      <div class="text-danger" *ngIf="isInvalid('Famille')">Le champ Famille est requis.</div>
+    </div>
+
+    <!-- Code Famille -->
+    <div class="form-group mb-3">
+      <label for="codeFamille">Code Famille *</label>
+      <input id="codeFamille" type="text" class="form-control" formControlName="codeFamille" />
+      <div class="text-danger" *ngIf="isInvalid('codeFamille')">Le champ Code Famille est requis.</div>
+    </div>
+
+    <!-- Sous Famille -->
+    <div class="form-group mb-3">
+      <label for="SousFamille">Sous Famille *</label>
+      <input id="SousFamille" type="text" class="form-control" formControlName="SousFamille" />
+      <div class="text-danger" *ngIf="isInvalid('SousFamille')">Le champ Sous Famille est requis.</div>
+    </div>
+
+    <!-- Saison -->
+    <div class="form-group mb-3">
+      <label for="Saison">Saison *</label>
+      <input id="Saison" type="text" class="form-control" formControlName="Saison" />
+      <div class="text-danger" *ngIf="isInvalid('Saison')">Le champ Saison est requis.</div>
+    </div>
+
+    <!-- Ordre -->
+    <div class="form-group mb-3">
+      <label for="Ordre">Ordre *</label>
+      <input id="Ordre" type="text" class="form-control" formControlName="Ordre" />
+      <div class="text-danger" *ngIf="isInvalid('Ordre')">Le champ Ordre est requis.</div>
+    </div>
+
+    <!-- Couleur -->
+    <div class="form-group mb-3">
+      <label for="couleur">Couleur *</label>
+      <input id="couleur" type="text" class="form-control" formControlName="couleur" />
+      <div class="text-danger" *ngIf="isInvalid('couleur')">Le champ Couleur est requis.</div>
+    </div>
+
+    <!-- Fournisseur -->
+    <div class="form-group mb-3">
+      <label for="fournisseur">Fournisseur *</label>
+      <input id="fournisseur" type="text" class="form-control" formControlName="fournisseur" />
+      <div class="text-danger" *ngIf="isInvalid('fournisseur')">Le champ Fournisseur est requis.</div>
+    </div>
+
+    <!-- Code Article -->
+    <div class="form-group mb-3">
+      <label for="Code">Code Article *</label>
+      <input id="Code" type="text" class="form-control" formControlName="Code" />
+      <div class="text-danger" *ngIf="isInvalid('Code')">Le champ Code Article est requis.</div>
+    </div>
+
+    <!-- Boutons -->
+    <div class="d-flex gap-3">
+      <button class="btn btn-secondary" type="button" (click)="genererCode()">Générer Code</button>
+      <button class="btn btn-primary" type="submit" [disabled]="articleForm.invalid">Vérifier</button>
+    </div>
+  </form>
+
+  <div *ngIf="verificationResult" style="margin: 20px;">
+  <div *ngIf="typeof verificationResult === 'string'">
+    <p class="text-success">{{ verificationResult }}</p>
+  </div>
+
+  <div *ngIf="isArray(verificationResult) && verificationResult.length > 0">
+    <ul class="list-group" style="margin: 10px;">
+      <li *ngFor="let anomaly of verificationResult" class="list-group-item">
+        <strong>{{ anomaly.Type }} - {{ anomaly.Code }}</strong><br />
+        {{ anomaly.message }}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="verificationResult?.error">
+    <p class="text-danger">{{ verificationResult.error }}</p>
+  </div>
+</div>
