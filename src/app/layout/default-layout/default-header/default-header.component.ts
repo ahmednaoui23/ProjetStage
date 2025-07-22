@@ -2,7 +2,6 @@ import { NgTemplateOutlet, CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { UserPopupComponent } from '../../../user-popup/user-popup.component'; // Adjust path
 
 import {
   AvatarComponent,
@@ -52,12 +51,10 @@ import { IconDirective } from '@coreui/icons-angular';
     DropdownHeaderDirective,
     DropdownItemDirective,
     BadgeComponent,
-    UserPopupComponent,
     DropdownDividerDirective
   ]
 })
 export class DefaultHeaderComponent extends HeaderComponent {
-  showPopup = false;
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
 

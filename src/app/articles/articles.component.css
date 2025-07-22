@@ -1,0 +1,179 @@
+/* Container général */
+.container {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header : titre à gauche, recherche à droite */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* permet de rester responsive */
+}
+
+/* Titre principal */
+.titre {
+  margin: 0;
+  font-size: 24px;
+  font-weight: lighter; /* équivalent x-large */
+  color: #222;
+}
+
+/* Conteneur barre de recherche */
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  padding: 5px 10px;
+  width: 280px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Focus léger sur la recherche */
+.search-container:focus-within {
+  box-shadow: 0 0 5px 2px #3f51b5;
+  border-color: #3f51b5;
+}
+
+/* Input recherche */
+.search-container input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+  background: transparent;
+  color: #333;
+}
+
+/* Bouton recherche (icône) */
+.search-container button {
+  background: none;
+  border: none;
+  cursor: default;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Badges (types d'anomalies) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+  user-select: none;
+}
+
+/* Badge rouge pour critique */
+.badge-danger {
+  background-color: #dc3545; /* Bootstrap rouge */
+}
+
+/* Badge jaune pour warning */
+.badge-warning {
+  background-color: #ffc107; /* Bootstrap jaune */
+  color: #212529; /* texte foncé */
+}
+
+/* Badge bleu pour info */
+.badge-info {
+  background-color: #17a2b8; /* Bootstrap bleu */
+}
+
+/* Table Angular Material */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+/* En-têtes de colonnes */
+th.mat-header-cell {
+  background-color: #f5f5f5;
+  font-weight: 700;
+  color: #333;
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Cellules */
+td.mat-cell {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+  color: #444;
+}
+
+/* Ligne survolée */
+tr.mat-row:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* Responsive : réduire la largeur de la recherche sur petit écran */
+@media (max-width: 480px) {
+  .search-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.custom-table {
+  background-color: #fff; /* ou la couleur de .container */
+  border-radius: 10px;
+  overflow: hidden;
+
+}
+
+
+.custom-table .mat-header-row {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+
+.custom-table .mat-header-cell {
+  font-weight: 700;
+  color: #333;
+  background-color: #f5f5f5;
+  padding: 12px 8px;
+  border-bottom: 2px solid #ddd;
+}
+
+
+.custom-table .mat-cell {
+  background-color: #ffffff; 
+  color: #444;
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+
+.custom-table .mat-row:nth-child(even) {
+  background-color: #ffffff; /* léger gris clair */
+}
+
+.custom-table .mat-row:hover {
+  background-color: #ffffff; /* bleu clair au survol */
+  cursor: pointer;
+}

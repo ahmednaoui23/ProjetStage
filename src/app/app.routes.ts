@@ -20,12 +20,32 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
       },
       {
+    path: 'anomalies',
+    loadComponent: () => import('../app/anomalies-list/anomalies-list.component').then(m => m.AnomaliesListComponent),
+    data: { title: 'Liste des Anomalies' }
+  },
+   {path: 'utilisateurs',
+    loadComponent: () => import('../app/Users/users.component').then(m => m.UsersComponent),
+    data: { title: 'Liste des Utilisateurs' }
+  },
+  {
+  path: 'utilisateur-fiche/:id',
+  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.UserFicheComponent),
+  data: { title: 'Fiche Utilisateur' }
+},
+  
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes),
       },
       {
         path: 'base',
         loadChildren: () => import('./views/base/routes').then((m) => m.routes),
+      },
+      {
+        path: 'articles',
+        loadComponent: () => import('../app/articles/articles.component').then((m) => m.ArticlesComponent),
+        data: { title: '  Liste des articles' }
       },
       {
         path: 'buttons',

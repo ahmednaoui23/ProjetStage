@@ -1,0 +1,112 @@
+<div class="container px-4 py-3">
+
+  <!-- Header: Title & Search -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+    <h2 class="titre m-0">Liste des Articles</h2>
+
+    <div class="search-container d-flex align-items-center gap-2">
+      <input
+        matInput
+        placeholder="Rechercher..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter($event)" />
+      <button mat-icon-button disabled>
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading bar -->
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+  <!-- Article Table -->
+  <table mat-table [dataSource]="articles" class="mat-elevation-z8 w-100 mt-3 custom-table">
+
+    <!-- Article (First Column) -->
+    <ng-container matColumnDef="article">
+      <th mat-header-cell *matHeaderCellDef> Article </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Article }} </td>
+    </ng-container>
+
+    <!-- Code (Second Column) -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef> Code </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Code }} </td>
+    </ng-container>
+
+    <!-- Couleur -->
+    <ng-container matColumnDef="couleur">
+      <th mat-header-cell *matHeaderCellDef> Couleur </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Couleur }} </td>
+    </ng-container>
+
+    <!-- Sous Famille -->
+    <ng-container matColumnDef="sousFamille">
+      <th mat-header-cell *matHeaderCellDef> Sous Famille </th>
+      <td mat-cell *matCellDef="let article"> {{ article.SousFamille }} </td>
+    </ng-container>
+
+    <!-- Famille -->
+    <ng-container matColumnDef="famille">
+      <th mat-header-cell *matHeaderCellDef> Famille </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Famille }} </td>
+    </ng-container>
+
+    <!-- Grille -->
+    <ng-container matColumnDef="grille">
+      <th mat-header-cell *matHeaderCellDef> Grille </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Grille }} </td>
+    </ng-container>
+
+    <!-- Saisi Par -->
+    <ng-container matColumnDef="saisiPar">
+      <th mat-header-cell *matHeaderCellDef> Saisi Par </th>
+      <td mat-cell *matCellDef="let article"> {{ article.SaisiPar }} </td>
+    </ng-container>
+
+    <!-- Saison -->
+    <ng-container matColumnDef="saison">
+      <th mat-header-cell *matHeaderCellDef> Saison </th>
+      <td mat-cell *matCellDef="let article"> {{ article.Saison }} </td>
+    </ng-container>
+
+    <!-- Checkbox Column -->
+    <!-- Checkbox Column -->
+<ng-container matColumnDef="select">
+  <th mat-header-cell *matHeaderCellDef>
+    <mat-checkbox
+      (change)="masterToggle($event)"
+      [checked]="isAllSelected()"
+      [indeterminate]="isPartialSelected()"
+      aria-label="Select all articles"
+    ></mat-checkbox>
+  </th>
+  <td mat-cell *matCellDef="let article; let i = index">
+    <ng-container *ngIf="i !== 10; else noCheckbox">
+      <mat-checkbox
+        (change)="toggleSelection(article)"
+        [checked]="selection.isSelected(article)"
+        aria-label="Select article"
+      ></mat-checkbox>
+    </ng-container>
+    <ng-template #noCheckbox>
+      &nbsp;
+    </ng-template>
+  </td>
+</ng-container>
+
+
+    <!-- Header and Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-end align-items-center mt-3 gap-3">
+    <button mat-raised-button color="primary" (click)="prevPage()" [disabled]="page === 1">Précédent</button>
+    <span>Page {{ page }} / {{ totalPages }}</span>
+    <button mat-raised-button color="primary" (click)="nextPage()" [disabled]="page === totalPages">Suivant</button>
+  </div>
+
+</div>
