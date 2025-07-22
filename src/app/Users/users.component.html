@@ -1,49 +1,69 @@
+<!-- src/app/users/users.component.html -->
 <div class="container px-4 py-3">
-  <!-- Header -->
-  <div class="header">
+
+  <!-- Header: Title and Search -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
     <h2 class="titre m-0">Liste des Utilisateurs</h2>
 
-    <!-- Search bar -->
-    <div class="search-container">
+    <div class="search-container d-flex align-items-center gap-2">
       <input
-        type="text"
+        matInput
         placeholder="Rechercher par email..."
-        [(ngModel)]="searchEmail"
-        (input)="search()"
-      />
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter($event)" />
+      <button mat-icon-button disabled>
+        <mat-icon>search</mat-icon>
+      </button>
     </div>
-
-    <!-- Add User Button -->
-    <button class="btn btn-success" (click)="router.navigate(['/add-user'])">
-      Ajouter Utilisateur
-    </button>
   </div>
+
+  <!-- Loading bar -->
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
   <!-- Users Table -->
-  <div class="table-responsive custom-table">
-    <table class="table table-hover">
-      <thead>
-        <tr class="mat-header-row">
-          <th class="mat-header-cell">Nom</th>
-          <th class="mat-header-cell">Prénom</th>
-          <th class="mat-header-cell">Email</th>
-          <th class="mat-header-cell">Rôle</th>
-          <th class="mat-header-cell">Date d'ajout</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="mat-row"
-          *ngFor="let user of filteredUsers"
-          (click)="goToFiche(user)"
-        >
-          <td class="mat-cell">{{ user.nom }}</td>
-          <td class="mat-cell">{{ user.prenom }}</td>
-          <td class="mat-cell">{{ user.email }}</td>
-          <td class="mat-cell">{{ user.role }}</td>
-          <td class="mat-cell">{{ user.datecreation | date: 'shortDate' }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <table mat-table [dataSource]="filteredUsers" class="mat-elevation-z8 w-100 mt-3 custom-table">
+
+    <!-- Nom -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef> Nom </th>
+      <td mat-cell *matCellDef="let user"> {{ user.nom }} </td>
+    </ng-container>
+
+    <!-- Prénom -->
+    <ng-container matColumnDef="prenom">
+      <th mat-header-cell *matHeaderCellDef> Prénom </th>
+      <td mat-cell *matCellDef="let user"> {{ user.prenom }} </td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+    </ng-container>
+
+    <!-- Rôle -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> Rôle </th>
+      <td mat-cell *matCellDef="let user"> {{ user.role }} </td>
+    </ng-container>
+
+    <!-- Date d'ajout -->
+    <ng-container matColumnDef="dateAjout">
+      <th mat-header-cell *matHeaderCellDef> Date d'ajout </th>
+      <td mat-cell *matCellDef="let user"> {{ user.dateAjout }} </td>
+    </ng-container>
+
+    <!-- Table Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="goToProfile(row.id)" class="cursor-pointer hover:bg-gray-50"></tr>
+
+  </table>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-end align-items-center mt-3 gap-3">
+    <button mat-raised-button color="primary" (click)="prevPage()" [disabled]="page === 1">Précédent</button>
+    <span>Page {{ page }} / {{ totalPages }}</span>
+    <button mat-raised-button color="primary" (click)="nextPage()" [disabled]="page === totalPages">Suivant</button>
   </div>
+
 </div>

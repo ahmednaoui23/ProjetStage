@@ -1,10 +1,12 @@
 export interface User {
-  id: number;
-  nom: string;
-  prenom: string;
+  id: number;  // not string
+  name: string;
   email: string;
   role: string;
-  password?: string;
-  datecreation: string;
-  imageUrl?: string;
+  address?: string;
+  phone?: string;
+  status?: string;
+  profileImage?: string;
+  createdAt?: string;
+  lastLogin?: string;
 }

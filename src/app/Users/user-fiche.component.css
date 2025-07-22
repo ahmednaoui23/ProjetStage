@@ -1,0 +1,145 @@
+.user-fiche-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.profile-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #eee;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.info {
+  flex: 1;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1.5rem;
+  align-items: center;
+}
+
+.info label {
+  font-weight: 600;
+  color: #555;
+}
+
+.info p, .info input, .info select {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.info input, .info select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.7rem 1.5rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-warning:hover {
+  background-color: #d39e00;
+}
+
+.active {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.inactive {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .profile-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .info label {
+    justify-self: center;
+  }
+
+  .info input, .info select {
+    max-width: 100%;
+  }
+}

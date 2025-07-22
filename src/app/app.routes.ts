@@ -28,6 +28,11 @@ export const routes: Routes = [
     loadComponent: () => import('../app/Users/users.component').then(m => m.UsersComponent),
     data: { title: 'Liste des Utilisateurs' }
   },
+  {
+  path: 'utilisateur-fiche/:id',
+  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.UserFicheComponent),
+  data: { title: 'Fiche Utilisateur' }
+},
   
       {
         path: 'theme',

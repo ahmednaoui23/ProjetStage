@@ -1,0 +1,67 @@
+<div class="user-fiche-container" *ngIf="user; else loading">
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ user.name }}</h2>
+      <button class="btn btn-secondary" (click)="goBack()">← Back</button>
+    </div>
+
+    <div class="profile-section">
+      <img class="profile-pic" [src]="user.profileImage" alt="Profile picture of {{ user.name }}" />
+
+      <div class="info">
+        <label>Name:</label>
+        <input *ngIf="editMode" [(ngModel)]="user.name" />
+        <p *ngIf="!editMode">{{ user.name }}</p>
+
+        <label>Email:</label>
+        <input *ngIf="editMode" [(ngModel)]="user.email" />
+        <p *ngIf="!editMode">{{ user.email }}</p>
+
+        <label>Role:</label>
+        <select *ngIf="editMode" [(ngModel)]="user.role">
+          <option>Admin</option>
+          <option>User</option>
+          <option>Moderator</option>
+        </select>
+        <p *ngIf="!editMode">{{ user.role }}</p>
+
+        <label>Address:</label>
+        <input *ngIf="editMode" [(ngModel)]="user.address" />
+        <p *ngIf="!editMode">{{ user.address }}</p>
+
+        <label>Phone:</label>
+        <input *ngIf="editMode" [(ngModel)]="user.phone" />
+        <p *ngIf="!editMode">{{ user.phone }}</p>
+
+        <label>Status:</label>
+        <p>
+          <span [class.active]="user.status === 'Active'" [class.inactive]="user.status === 'Inactive'">
+            {{ user.status }}
+          </span>
+        </p>
+
+        <label>Member since:</label>
+        <p>{{ user.createdAt | date: 'longDate' }}</p>
+
+        <label>Last Login:</label>
+        <p>{{ user.lastLogin | date: 'medium' }}</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" (click)="toggleEdit()">
+        {{ editMode ? 'Cancel' : 'Edit' }}
+      </button>
+
+      <button *ngIf="editMode" class="btn btn-success" (click)="saveChanges()">Save</button>
+
+      <button class="btn btn-danger" (click)="deleteUser()">Delete</button>
+
+      <button class="btn btn-warning" (click)="resetPassword()">Reset Password</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading user data...</p>
+</ng-template>
