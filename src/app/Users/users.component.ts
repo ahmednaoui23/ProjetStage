@@ -6,6 +6,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-users',
@@ -18,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
+    MatDialogModule      
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
@@ -49,7 +54,20 @@ export class UsersComponent {
   page = 1;
   pageSize = 10;
 
-  constructor(public router: Router) {}
+ constructor(public router: Router, private dialog: MatDialog) {}
+  openAddUserDialog() {
+    const dialogRef = this.dialog.open(AddUserDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.users.push({
+          id: this.users.length + 1,
+          ...result,
+          dateAjout: new Date(),
+        });
+      }
+    });
+  } 
 
   get filteredUsers() {
     const filtered = this.users.filter(user =>

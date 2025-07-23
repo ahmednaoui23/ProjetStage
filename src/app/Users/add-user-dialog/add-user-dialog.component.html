@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Ajouter un utilisateur</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="userForm">
+    <mat-form-field class="w-100">
+      <input matInput placeholder="Nom" formControlName="nom" />
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <input matInput placeholder="Prénom" formControlName="prenom" />
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <input matInput placeholder="Email" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <input matInput placeholder="Rôle" formControlName="role" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-button color="primary" (click)="submit()">Ajouter</button>
+</mat-dialog-actions>

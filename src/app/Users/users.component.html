@@ -1,18 +1,26 @@
 <!-- src/app/users/users.component.html -->
 <div class="container px-4 py-3">
 
-  <!-- Header: Title and Search -->
+  <!-- Header: Title, Search and Add Button -->
   <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
     <h2 class="titre m-0">Liste des Utilisateurs</h2>
 
-    <div class="search-container d-flex align-items-center gap-2">
-      <input
-        matInput
-        placeholder="Rechercher par email..."
-        [(ngModel)]="searchTerm"
-        (input)="applyFilter($event)" />
-      <button mat-icon-button disabled>
-        <mat-icon>search</mat-icon>
+    <div class="d-flex gap-2 align-items-center flex-wrap">
+      <!-- Search Input -->
+      <div class="search-container d-flex align-items-center gap-2">
+        <input
+          matInput
+          placeholder="Rechercher par email..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilter($event)" />
+        <button mat-icon-button disabled>
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+
+      <!-- Add User Button -->
+      <button mat-raised-button color="accent" (click)="openAddUserDialog()">
+        <mat-icon>person_add</mat-icon> Ajouter un utilisateur
       </button>
     </div>
   </div>
