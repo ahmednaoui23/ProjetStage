@@ -29,7 +29,7 @@
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
   <!-- Users Table -->
-  <table mat-table [dataSource]="filteredUsers" class="mat-elevation-z8 w-100 mt-3 custom-table">
+  <table mat-table [dataSource]="users" class="mat-elevation-z8 w-100 mt-3 custom-table">
 
     <!-- Nom -->
     <ng-container matColumnDef="nom">
@@ -56,10 +56,11 @@
     </ng-container>
 
     <!-- Date d'ajout -->
-    <ng-container matColumnDef="dateAjout">
-      <th mat-header-cell *matHeaderCellDef> Date d'ajout </th>
-      <td mat-cell *matCellDef="let user"> {{ user.dateAjout }} </td>
-    </ng-container>
+<ng-container matColumnDef="dateAjout">
+  <th mat-header-cell *matHeaderCellDef> Date d'ajout </th>
+  <td mat-cell *matCellDef="let user"> {{ user.dateAjout | date:'fullDate' }} </td>
+</ng-container>
+
 
     <!-- Table Row Definitions -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

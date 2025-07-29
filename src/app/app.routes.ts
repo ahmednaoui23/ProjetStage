@@ -30,7 +30,7 @@ export const routes: Routes = [
   },
   {
   path: 'utilisateur-fiche/:id',
-  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.UserFicheComponent),
+  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.FicheUtilisateurComponent),
   data: { title: 'Fiche Utilisateur' }
 },
   

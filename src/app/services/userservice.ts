@@ -1,46 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { User } from './user'; // Adjust the import path as necessary
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from './user';
+
+interface UsersResponse {
+  users: User[];
+  total: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private apiUrl = 'http://127.0.0.1:5000';
 
-  private mockUser: User = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'Admin',
-    address: '123 Main St, Tunis',
-    phone: '+216 20 123 456',
-    status: 'Active',
-    profileImage: 'https://randomuser.me/api/portraits/men/32.jpg',
-    createdAt: '2024-05-01T10:30:00Z',
-    lastLogin: '2024-07-20T14:00:00Z'
-  };
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
+  getUsers(page: number = 1, pageSize: number = 10, searchTerm: string = ''): Observable<UsersResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    if (searchTerm.trim()) {
+      params = params.set('searchTerm', searchTerm);
+    }
+
+    return this.http.get<UsersResponse>(`${this.apiUrl}/users`, { params });
+  }
 
   getUserById(id: number): Observable<User> {
-    // For now, return the mock user. Later connect to real API.
-    return of(this.mockUser);
+    return this.http.get<User>(`${this.apiUrl}/users/${id}`);
   }
 
-  updateUser(user: User): Observable<User> {
-    // Simulate updating user
-    console.log('Updating user:', user);
-    return of(user);
+  updateUser(user: User): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/users/${user.id}`, user);
   }
 
-  deleteUser(id: number): Observable<void> {
-    console.log('Deleting user id:', id);
-    return of(void 0);
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/users/${id}`);
   }
 
-  resetPassword(id: number): Observable<void> {
-    console.log('Resetting password for user id:', id);
-    return of(void 0);
+  resetPassword(id: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users/${id}/reset-password`, {});
   }
 }
-

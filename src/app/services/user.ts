@@ -1,6 +1,7 @@
 export interface User {
-  id: number;  // not string
-  name: string;
+  id: number;
+  firstName: string;
+  lastName: string;
   email: string;
   role: string;
   address?: string;

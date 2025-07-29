@@ -1,67 +1,95 @@
 <div class="user-fiche-container" *ngIf="user; else loading">
   <div class="card">
     <div class="card-header">
-      <h2>{{ user.name }}</h2>
-      <button class="btn btn-secondary" (click)="goBack()">← Back</button>
+      <h2>{{ user?.firstName }} {{ user?.lastName }}</h2>
+      <button class="btn btn-secondary" (click)="goBack()">← Retour</button>
     </div>
 
     <div class="profile-section">
-      <img class="profile-pic" [src]="user.profileImage" alt="Profile picture of {{ user.name }}" />
+      <img
+        class="profile-pic"
+        [src]="user?.profileImage || 'assets/default-profile.png'"
+        alt="Photo de {{ user?.firstName }} {{ user?.lastName }}"
+      />
 
       <div class="info">
-        <label>Name:</label>
-        <input *ngIf="editMode" [(ngModel)]="user.name" />
-        <p *ngIf="!editMode">{{ user.name }}</p>
+        <label>Nom complet :</label>
+        <ng-container *ngIf="editMode; else viewName">
+          <input [(ngModel)]="user.firstName" placeholder="Prénom" />
+          <input [(ngModel)]="user.lastName" placeholder="Nom" />
+        </ng-container>
+        <ng-template #viewName>
+          <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+        </ng-template>
 
-        <label>Email:</label>
-        <input *ngIf="editMode" [(ngModel)]="user.email" />
-        <p *ngIf="!editMode">{{ user.email }}</p>
+        <label>Email :</label>
+        <ng-container *ngIf="editMode; else viewEmail">
+          <input [(ngModel)]="user.email" />
+        </ng-container>
+        <ng-template #viewEmail>
+          <p>{{ user?.email }}</p>
+        </ng-template>
 
-        <label>Role:</label>
-        <select *ngIf="editMode" [(ngModel)]="user.role">
-          <option>Admin</option>
-          <option>User</option>
-          <option>Moderator</option>
-        </select>
-        <p *ngIf="!editMode">{{ user.role }}</p>
+        <label>Rôle :</label>
+        <ng-container *ngIf="editMode; else viewRole">
+          <select [(ngModel)]="user.role">
+            <option value="Admin">Administrateur</option>
+            <option value="User">Utilisateur</option>
+            <option value="Moderator">Modérateur</option>
+          </select>
+        </ng-container>
+        <ng-template #viewRole>
+          <p>{{ user?.role }}</p>
+        </ng-template>
 
-        <label>Address:</label>
-        <input *ngIf="editMode" [(ngModel)]="user.address" />
-        <p *ngIf="!editMode">{{ user.address }}</p>
+        <label>Adresse :</label>
+        <ng-container *ngIf="editMode; else viewAddress">
+          <input [(ngModel)]="user.address" />
+        </ng-container>
+        <ng-template #viewAddress>
+          <p>{{ user?.address }}</p>
+        </ng-template>
 
-        <label>Phone:</label>
-        <input *ngIf="editMode" [(ngModel)]="user.phone" />
-        <p *ngIf="!editMode">{{ user.phone }}</p>
+        <label>Téléphone :</label>
+        <ng-container *ngIf="editMode; else viewPhone">
+          <input [(ngModel)]="user.phone" />
+        </ng-container>
+        <ng-template #viewPhone>
+          <p>{{ user?.phone }}</p>
+        </ng-template>
 
-        <label>Status:</label>
+        <label>Statut :</label>
         <p>
-          <span [class.active]="user.status === 'Active'" [class.inactive]="user.status === 'Inactive'">
-            {{ user.status }}
+          <span
+            [class.active]="user?.status === 'Actif'"
+            [class.inactive]="user?.status === 'Inactif'"
+          >
+            {{ user?.status }}
           </span>
         </p>
 
-        <label>Member since:</label>
-        <p>{{ user.createdAt | date: 'longDate' }}</p>
+        <label>Membre depuis :</label>
+        <p>{{ user?.createdAt | date: 'longDate' }}</p>
 
-        <label>Last Login:</label>
-        <p>{{ user.lastLogin | date: 'medium' }}</p>
+        <label>Dernière connexion :</label>
+        <p>{{ user?.lastLogin | date: 'medium' }}</p>
       </div>
     </div>
 
     <div class="actions">
       <button class="btn btn-primary" (click)="toggleEdit()">
-        {{ editMode ? 'Cancel' : 'Edit' }}
+        {{ editMode ? 'Annuler' : 'Modifier' }}
       </button>
 
-      <button *ngIf="editMode" class="btn btn-success" (click)="saveChanges()">Save</button>
+      <button *ngIf="editMode" class="btn btn-success" (click)="saveChanges()">Enregistrer</button>
 
-      <button class="btn btn-danger" (click)="deleteUser()">Delete</button>
+      <button class="btn btn-danger" (click)="deleteUser()">Supprimer</button>
 
-      <button class="btn btn-warning" (click)="resetPassword()">Reset Password</button>
+      <button class="btn btn-warning" (click)="resetPassword()">Réinitialiser le mot de passe</button>
     </div>
   </div>
 </div>
 
 <ng-template #loading>
-  <p>Loading user data...</p>
+  <p>Chargement des données utilisateur...</p>
 </ng-template>

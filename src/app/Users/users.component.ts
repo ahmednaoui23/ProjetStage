@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
@@ -7,9 +7,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { UserService } from '../services/userservice'; // adjust path if needed
+import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
+
+interface UserDisplay {
+  id: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  role: string;
+  dateAjout: Date;
+}
 
 @Component({
   selector: 'app-users',
@@ -22,40 +32,56 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
-    MatDialogModule      
+    MatDialogModule
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   searchTerm = '';
   loading = false;
 
-  users = [
-    {
-      id: 1,
-      nom: 'Naoui',
-      prenom: 'Ahmed',
-      email: 'ahmed@example.com',
-      role: 'Admin',
-      dateAjout: new Date(),
-    },
-    {
-      id: 2,
-      nom: 'Doe',
-      prenom: 'Jane',
-      email: 'jane@example.com',
-      role: 'User',
-      dateAjout: new Date(),
-    },
-  ];
-
+  users: UserDisplay[] = [];
   displayedColumns: string[] = ['nom', 'prenom', 'email', 'role', 'dateAjout'];
   page = 1;
   pageSize = 10;
+  totalPages = 0;
+  totalUsers = 0;
 
- constructor(public router: Router, private dialog: MatDialog) {}
-  openAddUserDialog() {
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchUsers();
+  }
+
+  fetchUsers(): void {
+    this.loading = true;
+    this.userService.getUsers(this.page, this.pageSize, this.searchTerm).subscribe({
+      next: (data) => {
+        this.users = data.users.map(u => ({
+          id: u.id,
+          nom: u.lastName,
+          prenom: u.firstName,
+          email: u.email,
+          role: u.role,
+          dateAjout: u.createdAt ? new Date(u.createdAt.replace(' ', 'T')) : new Date()
+        }));
+        this.totalUsers = data.total;
+        this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  openAddUserDialog(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -63,37 +89,35 @@ export class UsersComponent {
         this.users.push({
           id: this.users.length + 1,
           ...result,
-          dateAjout: new Date(),
+          dateAjout: new Date()
         });
+        this.totalUsers++;
+        this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
       }
     });
-  } 
-
-  get filteredUsers() {
-    const filtered = this.users.filter(user =>
-      user.email.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-    this.totalPages = Math.ceil(filtered.length / this.pageSize);
-    const start = (this.page - 1) * this.pageSize;
-    return filtered.slice(start, start + this.pageSize);
   }
 
-  totalPages = Math.ceil(this.users.length / this.pageSize);
-
-  applyFilter(event: any) {
-    this.page = 1; // reset to first page on filter
+  applyFilter(event: any): void {
+    this.page = 1;
     this.searchTerm = event.target.value;
+    this.fetchUsers();
   }
 
-  goToProfile(userId: number) {
+  goToProfile(userId: number): void {
     this.router.navigate(['/utilisateur-fiche', userId]);
   }
 
-  prevPage() {
-    if (this.page > 1) this.page--;
+  prevPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.fetchUsers();
+    }
   }
 
-  nextPage() {
-    if (this.page < this.totalPages) this.page++;
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.fetchUsers();
+    }
   }
 }
