@@ -1,82 +1,150 @@
 <div class="user-fiche-container" *ngIf="user; else loading">
-  <div class="card">
-    <div class="card-header">
-      <h2>{{ user?.firstName }} {{ user?.lastName }}</h2>
+  <div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">{{ user?.firstName }} {{ user?.lastName }}</h2>
       <button class="btn btn-secondary" (click)="goBack()">← Retour</button>
     </div>
 
-    <div class="profile-section">
-      <img
-        class="profile-pic"
-        [src]="user?.profileImage || 'assets/default-profile.png'"
-        alt="Photo de {{ user?.firstName }} {{ user?.lastName }}"
-      />
+    <div class="d-flex flex-wrap gap-4">
+      <!-- Profile Picture with upload -->
+      <div>
+        <!-- View mode -->
+        <img
+          *ngIf="!editMode"
+          class="rounded-circle shadow"
+          style="width: 140px; height: 140px; object-fit: cover;"
+          [src]="user?.profileImage || 'assets/default-profile.png'"
+          (error)="user.profileImage = 'assets/default-profile.png'"
+          [alt]="'Photo de ' + user?.firstName + ' ' + user?.lastName"
+        />
 
-      <div class="info">
-        <label>Nom complet :</label>
-        <ng-container *ngIf="editMode; else viewName">
-          <input [(ngModel)]="user.firstName" placeholder="Prénom" />
-          <input [(ngModel)]="user.lastName" placeholder="Nom" />
-        </ng-container>
-        <ng-template #viewName>
-          <p>{{ user?.firstName }} {{ user?.lastName }}</p>
-        </ng-template>
-
-        <label>Email :</label>
-        <ng-container *ngIf="editMode; else viewEmail">
-          <input [(ngModel)]="user.email" />
-        </ng-container>
-        <ng-template #viewEmail>
-          <p>{{ user?.email }}</p>
-        </ng-template>
-
-        <label>Rôle :</label>
-        <ng-container *ngIf="editMode; else viewRole">
-          <select [(ngModel)]="user.role">
-            <option value="Admin">Administrateur</option>
-            <option value="User">Utilisateur</option>
-            <option value="Moderator">Modérateur</option>
-          </select>
-        </ng-container>
-        <ng-template #viewRole>
-          <p>{{ user?.role }}</p>
-        </ng-template>
-
-        <label>Adresse :</label>
-        <ng-container *ngIf="editMode; else viewAddress">
-          <input [(ngModel)]="user.address" />
-        </ng-container>
-        <ng-template #viewAddress>
-          <p>{{ user?.address }}</p>
-        </ng-template>
-
-        <label>Téléphone :</label>
-        <ng-container *ngIf="editMode; else viewPhone">
-          <input [(ngModel)]="user.phone" />
-        </ng-container>
-        <ng-template #viewPhone>
-          <p>{{ user?.phone }}</p>
-        </ng-template>
-
-        <label>Statut :</label>
-        <p>
-          <span
-            [class.active]="user?.status === 'Actif'"
-            [class.inactive]="user?.status === 'Inactif'"
+        <!-- Edit mode with upload -->
+        <div *ngIf="editMode" style="position: relative; width: 140px; height: 140px;">
+          <img
+            class="rounded-circle shadow"
+            style="width: 140px; height: 140px; object-fit: cover;"
+            [src]="previewImage || user?.profileImage || 'assets/default-profile.png'"
+            [alt]="'Photo de ' + user?.firstName + ' ' + user?.lastName"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            style="display: none;"
+          />
+          <button
+            type="button"
+            (click)="triggerFileInput()"
+            style="
+              position: absolute;
+              bottom: 5px;
+              right: 5px;
+              background: rgba(0,0,0,0.5);
+              color: white;
+              border: none;
+              border-radius: 50%;
+              width: 32px;
+              height: 32px;
+              cursor: pointer;
+            "
+            title="Changer la photo"
           >
-            {{ user?.status }}
-          </span>
-        </p>
+            📷
+          </button>
+        </div>
+      </div>
 
-        <label>Membre depuis :</label>
-        <p>{{ user?.createdAt | date: 'longDate' }}</p>
+      <!-- User Info Form -->
+      <div class="flex-grow-1">
+        <div class="row g-3">
+          <!-- Full Name -->
+          <div class="col-md-6">
+            <label>Nom complet :</label>
+            <ng-container *ngIf="editMode; else viewName">
+              <input [(ngModel)]="user.firstName" class="form-control mb-2" placeholder="Prénom" />
+              <input [(ngModel)]="user.lastName" class="form-control" placeholder="Nom" />
+            </ng-container>
+            <ng-template #viewName>
+              <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+            </ng-template>
+          </div>
 
-        <label>Dernière connexion :</label>
-        <p>{{ user?.lastLogin | date: 'medium' }}</p>
+          <!-- Email -->
+          <div class="col-md-6">
+            <label>Email :</label>
+            <ng-container *ngIf="editMode; else viewEmail">
+              <input [(ngModel)]="user.email" class="form-control" />
+            </ng-container>
+            <ng-template #viewEmail>
+              <p>{{ user?.email }}</p>
+            </ng-template>
+          </div>
+
+          <!-- Role -->
+          <div class="col-md-6">
+            <label>Rôle :</label>
+            <ng-container *ngIf="editMode; else viewRole">
+              <select [(ngModel)]="user.role" class="form-select">
+                <option value="Admin">Administrateur</option>
+                <option value="User">Utilisateur</option>
+                <option value="Moderator">Modérateur</option>
+              </select>
+            </ng-container>
+            <ng-template #viewRole>
+              <p>{{ user?.role }}</p>
+            </ng-template>
+          </div>
+
+          <!-- Address -->
+          <div class="col-md-6">
+            <label>Adresse :</label>
+            <ng-container *ngIf="editMode; else viewAddress">
+              <input [(ngModel)]="user.address" class="form-control" />
+            </ng-container>
+            <ng-template #viewAddress>
+              <p>{{ user?.address }}</p>
+            </ng-template>
+          </div>
+
+          <!-- Phone -->
+          <div class="col-md-6">
+            <label>Téléphone :</label>
+            <ng-container *ngIf="editMode; else viewPhone">
+              <input [(ngModel)]="user.phone" class="form-control" />
+            </ng-container>
+            <ng-template #viewPhone>
+              <p>{{ user?.phone }}</p>
+            </ng-template>
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-6">
+            <label>Statut :</label>
+            <p>
+              <span [class.text-success]="user?.status === 'Actif'" [class.text-danger]="user?.status === 'Inactif'">
+                {{ user?.status }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Created At -->
+          <div class="col-md-6">
+            <label>Membre depuis :</label>
+            <p>{{ user?.createdAt | date: 'longDate' }}</p>
+          </div>
+
+          <!-- Last Login -->
+          <div class="col-md-6">
+            <label>Dernière connexion :</label>
+            <p>{{ user?.lastLogin | date: 'medium' }}</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="actions">
+    <!-- Actions -->
+    <div class="mt-4 d-flex flex-wrap gap-2">
       <button class="btn btn-primary" (click)="toggleEdit()">
         {{ editMode ? 'Annuler' : 'Modifier' }}
       </button>
@@ -85,7 +153,7 @@
 
       <button class="btn btn-danger" (click)="deleteUser()">Supprimer</button>
 
-      <button class="btn btn-warning" (click)="resetPassword()">Réinitialiser le mot de passe</button>
+      <button class="btn btn-warning" (click)="confirmResetPassword()">Réinitialiser le mot de passe</button>
     </div>
   </div>
 </div>

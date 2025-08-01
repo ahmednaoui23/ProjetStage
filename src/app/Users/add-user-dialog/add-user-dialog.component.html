@@ -2,20 +2,30 @@
 
 <mat-dialog-content>
   <form [formGroup]="userForm">
-    <mat-form-field class="w-100">
-      <input matInput placeholder="Nom" formControlName="nom" />
-    </mat-form-field>
+    <div class="form-row">
+      <mat-form-field>
+        <input matInput placeholder="Nom" formControlName="nom" />
+      </mat-form-field>
 
-    <mat-form-field class="w-100">
-      <input matInput placeholder="Prénom" formControlName="prenom" />
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Prénom" formControlName="prenom" />
+      </mat-form-field>
+    </div>
 
-    <mat-form-field class="w-100">
+    <mat-form-field>
       <input matInput placeholder="Email" formControlName="email" />
     </mat-form-field>
 
-    <mat-form-field class="w-100">
+    <mat-form-field>
       <input matInput placeholder="Rôle" formControlName="role" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Adresse" formControlName="address" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Numéro du téléphone" formControlName="phoneNumber" />
     </mat-form-field>
   </form>
 </mat-dialog-content>

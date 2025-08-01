@@ -3,17 +3,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/userservice';
 import { User } from '../services/user';
 
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { timer } from 'rxjs';
+
 @Component({
+  standalone: true,
   selector: 'app-fiche-utilisateur',
   templateUrl: './user-fiche.component.html',
-  styleUrls: ['./user-fiche.component.css']
-  // Removed providers: [DatePipe]
+  styleUrls: ['./user-fiche.component.css'],
+  imports: [CommonModule, FormsModule],
+  providers: [DatePipe]
 })
 export class FicheUtilisateurComponent implements OnInit {
   user: User | null = null;
   editMode = false;
   loading = true;
   errorMessage = '';
+
+  previewImage: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +45,8 @@ export class FicheUtilisateurComponent implements OnInit {
     this.userService.getUserById(id).subscribe({
       next: (data) => {
         this.user = this.mapUserResponse(data);
+        this.previewImage = null;
+        this.selectedFile = null;
         this.loading = false;
       },
       error: () => {
@@ -57,13 +68,12 @@ export class FicheUtilisateurComponent implements OnInit {
       status: data.status || '',
       createdAt: data.createdAt || '',
       lastLogin: data.lastLogin || '',
-      profileImage: 'assets/profile-placeholder.png'
+      profileImage: data.profileImage ? `${data.profileImage}?t=${new Date().getTime()}` : 'assets/default-profile.png'
     };
   }
 
   get fullName(): string {
-    if (!this.user) return '';
-    return `${this.user.firstName} ${this.user.lastName}`.trim();
+    return this.user ? `${this.user.firstName} ${this.user.lastName}`.trim() : '';
   }
 
   translateRole(role: string): string {
@@ -102,17 +112,36 @@ export class FicheUtilisateurComponent implements OnInit {
       role: this.reverseTranslateRole(this.user.role),
       address: this.user.address,
       phoneNumber: this.user.phone,
-      status: this.user.status
+      status: this.user.status,
     };
 
     this.userService.updateUser(updatedUser).subscribe({
       next: () => {
-        alert('Utilisateur mis à jour avec succès.');
-        this.editMode = false;
-        this.loadUser(this.user!.id);
+        if (this.selectedFile) {
+          this.userService.uploadProfileImage(this.user!.id, this.selectedFile).subscribe({
+            next: () => {
+              timer(500).subscribe(() => {
+                this.loadUser(this.user!.id);
+                alert('Utilisateur et photo mis à jour avec succès.');
+                this.editMode = false;
+                this.selectedFile = null;
+                this.previewImage = null;
+              });
+            },
+            error: () => {
+              alert("L'utilisateur a été mis à jour, mais l'upload de la photo a échoué.");
+              this.editMode = false;
+              this.loadUser(this.user!.id);
+            }
+          });
+        } else {
+          alert('Utilisateur mis à jour avec succès.');
+          this.editMode = false;
+          this.loadUser(this.user!.id);
+        }
       },
       error: () => {
-        alert('Échec de la mise à jour de l\'utilisateur.');
+        alert("Échec de la mise à jour de l'utilisateur.");
       }
     });
   }
@@ -120,15 +149,14 @@ export class FicheUtilisateurComponent implements OnInit {
   deleteUser(): void {
     if (!this.user) return;
 
-    const confirmed = confirm(`Voulez-vous vraiment supprimer l'utilisateur "${this.fullName}" ? Cette action est irréversible.`);
-    if (confirmed) {
+    if (confirm(`Voulez-vous vraiment supprimer l'utilisateur "${this.fullName}" ? Cette action est irréversible.`)) {
       this.userService.deleteUser(this.user.id).subscribe({
         next: () => {
           alert('Utilisateur supprimé avec succès.');
-          this.router.navigate(['/users']);
+          this.router.navigate(['/utilisateurs']);
         },
         error: () => {
-          alert('Échec de la suppression de l\'utilisateur.');
+          alert("Échec de la suppression de l'utilisateur.");
         }
       });
     }
@@ -137,8 +165,7 @@ export class FicheUtilisateurComponent implements OnInit {
   resetPassword(): void {
     if (!this.user) return;
 
-    const confirmed = confirm(`Voulez-vous vraiment réinitialiser le mot de passe de "${this.fullName}" ?`);
-    if (confirmed) {
+    if (confirm(`Voulez-vous vraiment réinitialiser le mot de passe de "${this.fullName}" ?`)) {
       this.userService.resetPassword(this.user.id).subscribe({
         next: () => {
           alert('Mot de passe réinitialisé avec succès. Un nouvel email a été envoyé.');
@@ -151,6 +178,34 @@ export class FicheUtilisateurComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/utilisateurs']);
+  }
+
+  confirmResetPassword(): void {
+    if (confirm('Êtes-vous sûr de vouloir réinitialiser le mot de passe ?')) {
+      this.resetPassword();
+    }
+  }
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('fileInput') as HTMLElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+
+      input.value = '';
+    }
   }
 }

@@ -43,4 +43,16 @@ export class UserService {
   resetPassword(id: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/${id}/reset-password`, {});
   }
+
+  uploadProfileImage(userId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('profileImage', file);
+
+    return this.http.post<any>(`${this.apiUrl}/users/${userId}/upload-profile-image`, formData);
+  }
+
+  // ➕ New method to create user
+  createUser(userData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users`, userData);
+  }
 }

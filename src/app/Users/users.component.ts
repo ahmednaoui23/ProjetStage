@@ -64,8 +64,8 @@ export class UsersComponent implements OnInit {
       next: (data) => {
         this.users = data.users.map(u => ({
           id: u.id,
-          nom: u.lastName,
-          prenom: u.firstName,
+          nom: u.firstName,   // Fix: backend sends firstName → nom
+          prenom: u.lastName,  // Fix: backend sends lastName → prenom
           email: u.email,
           role: u.role,
           dateAjout: u.createdAt ? new Date(u.createdAt.replace(' ', 'T')) : new Date()
@@ -84,15 +84,11 @@ export class UsersComponent implements OnInit {
   openAddUserDialog(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.users.push({
-          id: this.users.length + 1,
-          ...result,
-          dateAjout: new Date()
-        });
-        this.totalUsers++;
-        this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
+    dialogRef.afterClosed().subscribe(success => {
+      if (success) {
+        // Instead of pushing locally, refetch users from backend to get real data (with ID etc.)
+        this.page = 1; // optional: reset to first page after adding new user
+        this.fetchUsers();
       }
     });
   }
