@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, viewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { getStyle } from '@coreui/utils';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { RouterLink } from '@angular/router';
@@ -19,31 +19,39 @@ import {
 @Component({
   selector: 'app-widgets-dropdown',
   templateUrl: './widgets-dropdown.component.html',
-  imports: [RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, IconDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective, ChartjsComponent]
+  imports: [
+    RowComponent,
+    ColComponent,
+    WidgetStatAComponent,
+    TemplateIdDirective,
+    IconDirective,
+    DropdownComponent,
+    ButtonDirective,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    RouterLink,
+    DropdownDividerDirective,
+    ChartjsComponent
+  ]
 })
 export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
 
+  // Your dynamic widget values here
+  users = { value: '26K', change: '-12.4%', isUp: false };
+  income = { value: '$6,200', change: '40.9%', isUp: true };
+  conversionRate = { value: '2.49', change: '84.7%', isUp: true };
+  sessions = { value: '44K', change: '-23.6%', isUp: false };
+
   data: any[] = [];
   options: any[] = [];
   labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-    'January',
-    'February',
-    'March',
-    'April'
+    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December',
+    'January', 'February', 'March', 'April'
   ];
+
   datasets = [
     [{
       label: 'My First dataset',
@@ -75,48 +83,29 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
       barPercentage: 0.7
     }]
   ];
+
   optionsDefault = {
     plugins: {
-      legend: {
-        display: false
-      }
+      legend: { display: false }
     },
     maintainAspectRatio: false,
     scales: {
       x: {
-        border: {
-          display: false
-        },
-        grid: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          display: false
-        }
+        border: { display: false },
+        grid: { display: false, drawBorder: false },
+        ticks: { display: false }
       },
       y: {
         min: 30,
         max: 89,
         display: false,
-        grid: {
-          display: false
-        },
-        ticks: {
-          display: false
-        }
+        grid: { display: false },
+        ticks: { display: false }
       }
     },
     elements: {
-      line: {
-        borderWidth: 1,
-        tension: 0.4
-      },
-      point: {
-        radius: 4,
-        hitRadius: 10,
-        hoverRadius: 4
-      }
+      line: { borderWidth: 1, tension: 0.4 },
+      point: { radius: 4, hitRadius: 10, hoverRadius: 4 }
     }
   };
 
@@ -126,7 +115,6 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
-
   }
 
   setData() {
@@ -143,119 +131,30 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
     for (let idx = 0; idx < 4; idx++) {
       const options = JSON.parse(JSON.stringify(this.optionsDefault));
       switch (idx) {
-        case 0: {
+        case 0:
           this.options.push(options);
           break;
-        }
-        case 1: {
+        case 1:
           options.scales.y.min = -9;
           options.scales.y.max = 39;
           options.elements.line.tension = 0;
           this.options.push(options);
           break;
-        }
-        case 2: {
+        case 2:
           options.scales.x = { display: false };
           options.scales.y = { display: false };
           options.elements.line.borderWidth = 2;
           options.elements.point.radius = 0;
           this.options.push(options);
           break;
-        }
-        case 3: {
-          options.scales.x.grid = { display: false, drawTicks: false };
+        case 3:
           options.scales.x.grid = { display: false, drawTicks: false, drawBorder: false };
           options.scales.y.min = undefined;
           options.scales.y.max = undefined;
           options.elements = {};
           this.options.push(options);
           break;
-        }
       }
     }
-  }
-}
-
-@Component({
-  selector: 'app-chart-sample',
-  template: '<c-chart type="line" [data]="data" [options]="options" width="300" #chart />',
-  imports: [ChartjsComponent]
-})
-export class ChartSample implements AfterViewInit {
-
-  constructor() {}
-
-  readonly chartComponent = viewChild.required<ChartjsComponent>('chart');
-
-  colors = {
-    label: 'My dataset',
-    backgroundColor: 'rgba(77,189,116,.2)',
-    borderColor: '#4dbd74',
-    pointHoverBackgroundColor: '#fff'
-  };
-
-  labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-
-  data = {
-    labels: this.labels,
-    datasets: [{
-      data: [65, 59, 84, 84, 51, 55, 40],
-      ...this.colors,
-      fill: { value: 65 }
-    }]
-  };
-
-  options = {
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    elements: {
-      line: {
-        tension: 0.4
-      }
-    }
-  };
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const data = () => {
-        return {
-          ...this.data,
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-          datasets: [{
-            ...this.data.datasets[0],
-            data: [42, 88, 42, 66, 77],
-            fill: { value: 55 }
-          }, { ...this.data.datasets[0], borderColor: '#ffbd47', data: [88, 42, 66, 77, 42] }]
-        };
-      };
-      const newLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-      const newData = [42, 88, 42, 66, 77];
-      let { datasets, labels } = { ...this.data };
-      // @ts-ignore
-      const before = this.chartComponent()?.chart?.data.datasets.length;
-      console.log('before', before);
-      // console.log('datasets, labels', datasets, labels)
-      // @ts-ignore
-      // this.data = data()
-      this.data = {
-        ...this.data,
-        datasets: [{ ...this.data.datasets[0], data: newData }, {
-          ...this.data.datasets[0],
-          borderColor: '#ffbd47',
-          data: [88, 42, 66, 77, 42]
-        }],
-        labels: newLabels
-      };
-      // console.log('datasets, labels', { datasets, labels } = {...this.data})
-      // @ts-ignore
-      setTimeout(() => {
-        const after = this.chartComponent()?.chart?.data.datasets.length;
-        console.log('after', after);
-      });
-    }, 5000);
   }
 }
