@@ -1,7 +1,7 @@
 <div class="user-fiche-container" *ngIf="user; else loading">
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">{{ user?.firstName }} {{ user?.lastName }}</h2>
+      <h2 class="mb-0">{{ user.firstName }} {{ user.lastName }}</h2>
       <button class="btn btn-secondary" (click)="goBack()">← Retour</button>
     </div>
 
@@ -13,9 +13,9 @@
           *ngIf="!editMode"
           class="rounded-circle shadow"
           style="width: 140px; height: 140px; object-fit: cover;"
-          [src]="user?.profileImage || 'assets/default-profile.png'"
+          [src]="user.profileImage || 'assets/default-profile.png'"
           (error)="user.profileImage = 'assets/default-profile.png'"
-          [alt]="'Photo de ' + user?.firstName + ' ' + user?.lastName"
+          [alt]="'Photo de ' + user.firstName + ' ' + user.lastName"
         />
 
         <!-- Edit mode with upload -->
@@ -23,8 +23,8 @@
           <img
             class="rounded-circle shadow"
             style="width: 140px; height: 140px; object-fit: cover;"
-            [src]="previewImage || user?.profileImage || 'assets/default-profile.png'"
-            [alt]="'Photo de ' + user?.firstName + ' ' + user?.lastName"
+            [src]="previewImage || user.profileImage || 'assets/default-profile.png'"
+            [alt]="'Photo de ' + user.firstName + ' ' + user.lastName"
           />
           <input
             type="file"
@@ -66,7 +66,7 @@
               <input [(ngModel)]="user.lastName" class="form-control" placeholder="Nom" />
             </ng-container>
             <ng-template #viewName>
-              <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+              <p>{{ user.firstName }} {{ user.lastName }}</p>
             </ng-template>
           </div>
 
@@ -77,7 +77,7 @@
               <input [(ngModel)]="user.email" class="form-control" />
             </ng-container>
             <ng-template #viewEmail>
-              <p>{{ user?.email }}</p>
+              <p>{{ user.email }}</p>
             </ng-template>
           </div>
 
@@ -92,7 +92,7 @@
               </select>
             </ng-container>
             <ng-template #viewRole>
-              <p>{{ user?.role }}</p>
+              <p>{{ user.role }}</p>
             </ng-template>
           </div>
 
@@ -103,7 +103,7 @@
               <input [(ngModel)]="user.address" class="form-control" />
             </ng-container>
             <ng-template #viewAddress>
-              <p>{{ user?.address }}</p>
+              <p>{{ user.address }}</p>
             </ng-template>
           </div>
 
@@ -114,7 +114,7 @@
               <input [(ngModel)]="user.phone" class="form-control" />
             </ng-container>
             <ng-template #viewPhone>
-              <p>{{ user?.phone }}</p>
+              <p>{{ user.phone }}</p>
             </ng-template>
           </div>
 
@@ -122,8 +122,8 @@
           <div class="col-md-6">
             <label>Statut :</label>
             <p>
-              <span [class.text-success]="user?.status === 'Actif'" [class.text-danger]="user?.status === 'Inactif'">
-                {{ user?.status }}
+              <span [class.text-success]="user.status === 'Actif'" [class.text-danger]="user.status === 'Inactif'">
+                {{ user.status }}
               </span>
             </p>
           </div>
@@ -131,13 +131,13 @@
           <!-- Created At -->
           <div class="col-md-6">
             <label>Membre depuis :</label>
-            <p>{{ user?.createdAt | date: 'longDate' }}</p>
+            <p>{{ user.createdAt | date: 'longDate' }}</p>
           </div>
 
           <!-- Last Login -->
           <div class="col-md-6">
             <label>Dernière connexion :</label>
-            <p>{{ user?.lastLogin | date: 'medium' }}</p>
+            <p>{{ user.lastLogin | date: 'medium' }}</p>
           </div>
         </div>
       </div>

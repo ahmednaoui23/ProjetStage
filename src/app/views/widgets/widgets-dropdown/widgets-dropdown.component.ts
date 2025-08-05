@@ -3,6 +3,7 @@ import { getStyle } from '@coreui/utils';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
+import { StatsService } from '../../../services/stats.service';
 import {
   ButtonDirective,
   ColComponent,
@@ -38,11 +39,11 @@ import {
 export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
 
-  // Your dynamic widget values here
-  users = { value: '26K', change: '-12.4%', isUp: false };
-  income = { value: '$6,200', change: '40.9%', isUp: true };
-  conversionRate = { value: '2.49', change: '84.7%', isUp: true };
-  sessions = { value: '44K', change: '-23.6%', isUp: false };
+  // Dynamic widget values initialized with placeholders
+  users = { value: '0', change: '', isUp: true };
+  income = { value: '0', change: '', isUp: true };
+  conversionRate = { value: '0', change: '', isUp: true };
+  sessions = { value: '0', change: '', isUp: true };
 
   data: any[] = [];
   options: any[] = [];
@@ -109,8 +110,11 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
     }
   };
 
+  constructor(private statsService: StatsService) {}
+
   ngOnInit(): void {
     this.setData();
+    this.loadStats();
   }
 
   ngAfterContentInit(): void {
@@ -156,5 +160,32 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
           break;
       }
     }
+  }
+
+  loadStats(): void {
+    this.statsService.getStats().subscribe({
+      next: (data) => {
+        this.users.value = data.users.toString();
+        this.income.value = data.anomalies.toString();
+        this.conversionRate.value = data.articles.toString();
+        this.sessions.value = data.logins.toString();
+
+        // Optional: you can set changes and isUp dynamically if you have the logic/data
+        this.users.change = '';
+        this.income.change = '';
+        this.conversionRate.change = '';
+        this.sessions.change = '';
+
+        this.users.isUp = true;
+        this.income.isUp = true;
+        this.conversionRate.isUp = true;
+        this.sessions.isUp = true;
+
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading stats:', err);
+      }
+    });
   }
 }
