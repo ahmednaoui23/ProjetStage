@@ -7,18 +7,13 @@ import {
   ButtonGroupComponent,
   CardBodyComponent,
   CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
   ColComponent,
   FormCheckLabelDirective,
-  GutterDirective,
-  ProgressComponent,
   RowComponent,
   TableDirective
 } from '@coreui/angular';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { IconDirective } from '@coreui/icons-angular';
-import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
 
@@ -39,13 +34,14 @@ import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
     ChartjsComponent,
     CommonModule,
     NgStyle,
-    CardFooterComponent,
-    GutterDirective,
-    ProgressComponent,
-    WidgetsBrandComponent,
-    CardHeaderComponent
+    // Removed unused imports below
+    // CardFooterComponent,
+    // GutterDirective,
+    // ProgressComponent,
+    // WidgetsBrandComponent,
+    // CardHeaderComponent
   ],
-  standalone: true // if using Angular standalone components
+  standalone: true
 })
 export class DashboardComponent implements OnInit {
   readonly #destroyRef: DestroyRef = inject(DestroyRef);

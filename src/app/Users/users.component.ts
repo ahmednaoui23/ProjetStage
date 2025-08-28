@@ -1,11 +1,25 @@
-import { Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+
+import { UserService } from '../services/userservice'; // adjust path if needed
+import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
+
+interface UserDisplay {
+  id: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  role: string;
+  dateAjout: Date;
+}
 
 @Component({
   selector: 'app-users',
@@ -18,64 +32,88 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
+    MatDialogModule
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   searchTerm = '';
   loading = false;
 
-  users = [
-    {
-      id: 1,
-      nom: 'Naoui',
-      prenom: 'Ahmed',
-      email: 'ahmed@example.com',
-      role: 'Admin',
-      dateAjout: new Date(),
-    },
-    {
-      id: 2,
-      nom: 'Doe',
-      prenom: 'Jane',
-      email: 'jane@example.com',
-      role: 'User',
-      dateAjout: new Date(),
-    },
-  ];
-
+  users: UserDisplay[] = [];
   displayedColumns: string[] = ['nom', 'prenom', 'email', 'role', 'dateAjout'];
   page = 1;
   pageSize = 10;
+  totalPages = 0;
+  totalUsers = 0;
 
-  constructor(public router: Router) {}
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private userService: UserService
+  ) {}
 
-  get filteredUsers() {
-    const filtered = this.users.filter(user =>
-      user.email.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-    this.totalPages = Math.ceil(filtered.length / this.pageSize);
-    const start = (this.page - 1) * this.pageSize;
-    return filtered.slice(start, start + this.pageSize);
+  ngOnInit(): void {
+    this.fetchUsers();
   }
 
-  totalPages = Math.ceil(this.users.length / this.pageSize);
+  fetchUsers(): void {
+    this.loading = true;
+    this.userService.getUsers(this.page, this.pageSize, this.searchTerm).subscribe({
+      next: (data) => {
+        this.users = data.users.map(u => ({
+          id: u.id,
+          nom: u.firstName,   // Fix: backend sends firstName → nom
+          prenom: u.lastName,  // Fix: backend sends lastName → prenom
+          email: u.email,
+          role: u.role,
+          dateAjout: u.createdAt ? new Date(u.createdAt.replace(' ', 'T')) : new Date()
+        }));
+        this.totalUsers = data.total;
+        this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+        this.loading = false;
+      }
+    });
+  }
 
-  applyFilter(event: any) {
-    this.page = 1; // reset to first page on filter
+  openAddUserDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent);
+
+    dialogRef.afterClosed().subscribe(success => {
+      if (success) {
+        // Instead of pushing locally, refetch users from backend to get real data (with ID etc.)
+        this.page = 1; // optional: reset to first page after adding new user
+        this.fetchUsers();
+      }
+    });
+  }
+
+  applyFilter(event: any): void {
+    this.page = 1;
     this.searchTerm = event.target.value;
+    this.fetchUsers();
   }
 
-  goToProfile(userId: number) {
+  goToProfile(userId: number): void {
     this.router.navigate(['/utilisateur-fiche', userId]);
   }
 
-  prevPage() {
-    if (this.page > 1) this.page--;
+  prevPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.fetchUsers();
+    }
   }
 
-  nextPage() {
-    if (this.page < this.totalPages) this.page++;
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.fetchUsers();
+    }
   }
 }

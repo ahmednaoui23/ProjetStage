@@ -1,0 +1,54 @@
+/* add-user-dialog.component.scss */
+
+/* Fix for hidden title */
+::ng-deep .mat-dialog-title {
+  position: sticky;      /* keep title visible on scroll */
+  top: 0;
+  z-index: 10;           /* above overlays */
+  background: white;     /* match dialog background */
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd; /* subtle border */
+}
+
+/* Remove extra top padding if overlapping */
+::ng-deep .mat-dialog-container {
+  width: 90vw;           /* responsive width */
+  max-width: 500px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  padding-top: 0;        /* no extra padding on top */
+}
+
+/* Push form content down below the title */
+::ng-deep .mat-dialog-content {
+  padding-top: 72px; /* increased padding to avoid overlap */
+}
+
+/* Responsive container width for medium+ screens */
+@media (min-width: 600px) {
+  ::ng-deep .mat-dialog-container {
+    width: 500px;
+  }
+}
+
+/* Make all mat-form-fields full width and spaced */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+/* Group name fields side-by-side on medium+ screens */
+.form-row {
+  display: flex;
+  flex-direction: column;  /* stacked on small screens */
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  mat-form-field {
+    flex: 1;
+  }
+}

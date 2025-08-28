@@ -6,20 +6,17 @@
       class="btn"
       toggle="visible"
       style="margin-inline-start: -14px;"
-      aria-label="Toggle sidebar navigation"
+      aria-label="Basculer la navigation de la barre latérale"
     >
       <svg cIcon name="cilMenu" size="lg"></svg>
     </button>
 
     <c-header-nav class="d-none d-md-flex">
       <c-nav-item>
-        <a cNavLink routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a cNavLink routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
       </c-nav-item>
       <c-nav-item>
-        <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a cNavLink routerLink="/settings" routerLinkActive="active">Settings</a>
+        <a cNavLink routerLink="/Utilisateurs" routerLinkActive="active">Utilisateurs</a>
       </c-nav-item>
     </c-header-nav>
 
@@ -57,27 +54,27 @@
 
 <ng-template #userDropdown>
   <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
-    <button [caret]="false" cDropdownToggle class="py-0 pe-0" aria-label="Open user menu">
+    <button [caret]="false" cDropdownToggle class="py-0 pe-0" aria-label="Ouvrir le menu utilisateur">
       <c-avatar
         shape="rounded-1"
         size="md"
         src="./assets/images/avatars/8.jpg"
         status="success"
         textColor="primary"
-        alt="User avatar"
+        alt="Avatar utilisateur"
       />
     </button>
 
     <ul cDropdownMenu class="pt-0 w-auto">
       <li>
         <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold py-2 rounded-top">
-          Account
+          Compte
         </h6>
       </li>
       <li>
         <a cDropdownItem routerLink="/Updates">
           <svg cIcon class="me-2" name="cilBell"></svg>
-          Updates
+          Mises à jour
           <c-badge class="ms-2 float-end" color="info">42</c-badge>
         </a>
       </li>
@@ -91,45 +88,45 @@
       <li>
         <a cDropdownItem routerLink="/apps/tasks">
           <svg cIcon class="me-2" name="cilTask"></svg>
-          Tasks
+          Tâches
           <c-badge class="ms-2 float-end" color="danger">42</c-badge>
         </a>
       </li>
       <li>
         <a cDropdownItem routerLink="/apps/comments">
           <svg cIcon class="me-2" name="cilCommentSquare"></svg>
-          Comments
+          Commentaires
           <c-badge class="ms-auto" color="warning">42</c-badge>
         </a>
       </li>
       <li>
         <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold py-2">
-          Settings
+          Paramètres
         </h6>
       </li>
       <li>
         <a cDropdownItem routerLink="/profile">
           <svg cIcon class="me-2" name="cilUser"></svg>
-          Profile
+          Profil
         </a>
       </li>
       <li>
         <a cDropdownItem routerLink="/settings">
           <svg cIcon class="me-2" name="cilSettings"></svg>
-          Settings
+          Paramètres
         </a>
       </li>
       <li>
         <a cDropdownItem routerLink="/apps/payments">
           <svg cIcon class="me-2" name="cilCreditCard"></svg>
-          Payments
+          Paiements
           <c-badge class="ms-2 float-end" color="secondary">42</c-badge>
         </a>
       </li>
       <li>
         <a cDropdownItem routerLink="/apps/projects">
           <svg cIcon class="me-2" name="cilFile"></svg>
-          Projects
+          Projets
           <c-badge class="ms-2 float-end" color="primary">42</c-badge>
         </a>
       </li>
@@ -137,13 +134,13 @@
       <li>
         <a cDropdownItem routerLink="/apps/notifications">
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
-          Lock Account
+          Verrouiller le compte
         </a>
       </li>
       <li>
         <a cDropdownItem (click)="logout()">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>
-          Logout
+          Déconnexion
         </a>
       </li>
     </ul>
@@ -152,7 +149,7 @@
 
 <ng-template #themeDropdown>
   <c-dropdown alignment="end" variant="nav-item">
-    <button [caret]="false" cDropdownToggle aria-label="Open theme picker">
+    <button [caret]="false" cDropdownToggle aria-label="Ouvrir le sélecteur de thème">
       <svg cIcon [name]="icons()" size="lg"></svg>
     </button>
     <div cDropdownMenu>

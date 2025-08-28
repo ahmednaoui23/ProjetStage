@@ -32,3 +32,14 @@
 //  --scrollbar-thumb-transition: height ease-out 150ms, width ease-out 150ms;
 //  --scrollbar-track-transition: height ease-out 150ms, width ease-out 150ms;
 //}
+
+.title {
+    color: white; /* default color for the text */
+    font-size: 25px; /* adjust as needed */
+    font-weight: bold;
+    margin: 0;
+}
+
+.title::first-letter {
+    color: red; /* first letter color */
+}

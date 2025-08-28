@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./layout').then((m) => m.DefaultLayoutComponent),
     data: {
-      title: 'Home'
+      title: 'Accueil',
     },
     canActivate: [AuthGuard], // 🔒 Protect the layout and all its children
     children: [
@@ -30,7 +30,7 @@ export const routes: Routes = [
   },
   {
   path: 'utilisateur-fiche/:id',
-  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.UserFicheComponent),
+  loadComponent: () => import('../app/Users/user-fiche.component').then(m => m.FicheUtilisateurComponent),
   data: { title: 'Fiche Utilisateur' }
 },
   
