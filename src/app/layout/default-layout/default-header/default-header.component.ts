@@ -59,9 +59,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
   readonly colorMode = this.#colorModeService.colorMode;
 
   readonly colorModes = [
-    { name: 'light', text: 'Light', icon: 'cilSun' },
-    { name: 'dark', text: 'Dark', icon: 'cilMoon' },
-    { name: 'auto', text: 'Auto', icon: 'cilContrast' }
+    { name: 'light', text: 'Clair', icon: 'cilSun' },
+    { name: 'dark', text: 'Sombre', icon: 'cilMoon' },
+    { name: 'auto', text: 'Automatique', icon: 'cilContrast' }
   ];
 
   sidebarId: string = 'sidebar1';
